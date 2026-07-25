@@ -20,7 +20,7 @@ import type { SessionInfo } from "../types";
 import { ChannelPicker } from "./SubscriptionsChip";
 import { Icon } from "./Icon";
 
-// Inbox ▸ Configure (UX-DECISIONS §28): the former Connectors ▸ "Messaging routing" page,
+// Inbox ▸ Configure (UX-DECISIONS §28): the former Connectors ▸ "消息路由" page,
 // relocated whole — where inbox items go out (mirror channel), how inbound messages reach
 // sessions (DM route, channel subscriptions), and the Unrouted dead-letter. Moving it here
 // also deleted a duplication: the mirror channel used to be editable BOTH on this page and
@@ -37,7 +37,7 @@ export function InboxConfigure() {
         <DmRouteCard />
       </div>
       <SubscriptionsCard />
-      {/* Unrouted = delivery FAILURES ("messages that never reached you"), so it lives with
+      {/* Unrouted = delivery FAILURES ("未能送达你的消息"), so it lives with
           the Inbox now (§28; previously with routing under Connectors, §26). */}
       <div className="mt-6" data-testid="unrouted-section">
         <h3 className="text-[14px] font-semibold mb-1">Unrouted</h3>
@@ -275,7 +275,7 @@ function SubscriptionsCard() {
                   {s.collision && (
                     <span
                       className="ml-1.5 text-[11px] text-warnInk bg-warnSoft/70 border border-warnInk/15 rounded px-1.5 py-0.5"
-                      title="This channel is also your Inbox-routing target — inbound and outbound on one channel conflate broadcast with request/reply."
+                      title="此频道同时是你的收件箱路由目标 —— 入站与出站共用一个频道会把广播与请求/回复混在一起。"
                     >
                       ⚠ collides
                     </span>
