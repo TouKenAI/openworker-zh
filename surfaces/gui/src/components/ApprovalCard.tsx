@@ -16,13 +16,13 @@ export function shortArgs(args: any): string {
 
 // Human verbs kept for the §25 grant lines (the card title now comes from humanize.ts).
 const TOOL_VERBS: Record<string, string> = {
-  write_file: "Write a file",
-  replace_in_file: "Edit a file",
-  apply_patch: "Apply a patch",
-  apply_unified_diff: "Apply a patch",
-  run_shell: "Run a command",
-  send_message: "Send a message",
-  send_file: "Send a file",
+  write_file: "写入文件",
+  replace_in_file: "编辑文件",
+  apply_patch: "应用补丁",
+  apply_unified_diff: "应用补丁",
+  run_shell: "运行命令",
+  send_message: "发送消息",
+  send_file: "发送文件",
 };
 
 // §35: routine workspace writes render as a compact ROW; everything else is a full card.
@@ -65,7 +65,7 @@ export function scopeNote(
   args: any,
   category?: string,
 ): { text: string; external: boolean } {
-  if (category === "connector") return { text: "acts on a connected service", external: true };
+  if (category === "connector") return { text: "作用于已连接的服务", external: true };
   if (EXTERNAL.has(name)) {
     const platform = String(args?.target ?? "").split(":")[0];
     const names: Record<string, string> = { slack: "Slack", telegram: "Telegram" };
@@ -141,7 +141,7 @@ function Buttons({
       {offerStanding && (
         <button
           className="btn"
-          title={`Always allow ${item.name} → ${item.standingTarget} for “${runTask?.title || "this automation"}” — revoke any time on its Automations page`}
+          title={`Always allow ${item.name} → ${item.standingTarget} for “${runTask?.title || "此自动化"}” — revoke any time on its Automations page`}
           onClick={() => onApprove("always_task")}
         >
           Allow every time
@@ -183,7 +183,7 @@ export function ApprovalCard({
   item: ApprovalItem;
   onApprove: (decision: ApprovalDecision) => void;
   // Present when this approval was raised inside an automation run — unlocks the
-  // task-persistent "Allow every time" (in-app only, §25).
+  // task-persistent "每次都允许" (in-app only, §25).
   runTask?: { id: string; title: string } | null;
   compact?: boolean;
 }) {
@@ -210,7 +210,7 @@ export function ApprovalCard({
             </button>
           )}
           <span className="spacer" />
-          <Buttons item={item} onApprove={onApprove} runTask={runTask} primaryLabel="Allow" />
+          <Buttons item={item} onApprove={onApprove} runTask={runTask} primaryLabel="允许" />
         </div>
         {peek && content && <PreviewBlock text={content} />}
         {reason && <div className="approval-reason">{reason}</div>}
@@ -263,7 +263,7 @@ export function ApprovalCard({
               <span className="grant-line">
                 {TOOL_VERBS[g.tool] || g.tool} <code className="approval-tool">{g.target}</code>
                 <span className="grant-note">
-                  {g.access === "write" ? " — always allowed once you approve" : " — read-only"}
+                  {g.access === "write" ? " —— 一旦你批准即永久允许" : " —— 只读"}
                 </span>
               </span>
             </div>
