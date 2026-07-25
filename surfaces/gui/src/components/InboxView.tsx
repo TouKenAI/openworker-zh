@@ -208,7 +208,7 @@ export function InboxView({
                   data-testid="inbox-route-configure"
                   onClick={() => setTab("configure")}
                 >
-                  Configure ›
+                  配置 ›
                 </button>
               </div>
 
