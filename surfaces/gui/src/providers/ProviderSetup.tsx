@@ -54,12 +54,12 @@ export function ProviderMark({ name, title, size = 32 }: { name: string; title: 
 export function relTime(epoch?: number | null): string | null {
   if (!epoch) return null;
   const secs = Math.max(0, Math.floor(Date.now() / 1000 - epoch));
-  if (secs < 90) return "just now";
+  if (secs < 90) return "刚刚";
   const mins = Math.floor(secs / 60);
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 60) return `${mins} 分钟前`;
   const hrs = Math.floor(mins / 60);
-  if (hrs < 48) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
+  if (hrs < 48) return `${hrs} 小时前`;
+  return `${Math.floor(hrs / 24)} 天前`;
 }
 
 export interface ProviderSetupState {
@@ -88,7 +88,7 @@ export interface ProviderSetupState {
   // the KEY's save path; extras like anthropic's thinking_budget must not need a re-test —
   // owner-hit 2026-07-23: the budget silently never saved).
   saveField: (key: string) => Promise<void>;
-  fieldSaved: string | null; // field key flashing "✓ Saved"
+  fieldSaved: string | null; // field key flashing "✓ 已保存"
 }
 
 export function useProviderSetup(opts?: { onSaved?: () => void }): ProviderSetupState {
@@ -105,7 +105,7 @@ export function useProviderSetup(opts?: { onSaved?: () => void }): ProviderSetup
   // Unsaved per-provider input survives switching cards (owner complaint 2026-07-16).
   const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>({});
   const backTimer = useRef<number | null>(null);
-  // Which non-secret field just blur-saved (flashes "✓ Saved" in the input).
+  // Which non-secret field just blur-saved (flashes "✓ 已保存" in the input).
   const [fieldSaved, setFieldSaved] = useState<string | null>(null);
   const fieldSavedTimer = useRef<number | null>(null);
 
@@ -195,7 +195,7 @@ export function useProviderSetup(opts?: { onSaved?: () => void }): ProviderSetup
     fieldSavedTimer.current = window.setTimeout(() => setFieldSaved(null), 1400);
   };
 
-  // Settings-only: forget the stored key; the card reverts to "Not set up".
+  // Settings-only: forget the stored key; the card reverts to "未配置".
   const removeKey = async () => {
     if (!sel) return;
     await removeProvider(sel).catch(() => {});
@@ -216,17 +216,17 @@ export function useProviderSetup(opts?: { onSaved?: () => void }): ProviderSetup
       const used = o?.lastUsed ? relTime(p.last_used_at) : null;
       return (
         <span className="block text-[11.5px] text-ok font-medium truncate">
-          ✓ Connected{used ? <span className="text-muted font-normal"> · used {used}</span> : ""}
+          ✓ 已连接{used ? <span className="text-muted font-normal"> · 用时 {used}</span> : ""}
         </span>
       );
     }
     if (!p.needs_key)
       return (
         <span className="block text-[11.5px] text-faint truncate">
-          {keylessOk.has(p.name) ? <span className="text-ok font-medium">✓ Running</span> : "No key needed"}
+          {keylessOk.has(p.name) ? <span className="text-ok font-medium">✓ 运行中</span> : "无需密钥"}
         </span>
       );
-    return <span className="block text-[11.5px] text-faint truncate">Not set up</span>;
+    return <span className="block text-[11.5px] text-faint truncate">未配置</span>;
   };
 
   return {
@@ -319,7 +319,7 @@ export function ProviderForm({
   return (
     <div>
       <button className="text-[12.5px] text-muted hover:text-ink" onClick={ps.backToGallery} data-testid={`${tp}-back`}>
-        ‹ All providers
+        ‹ 所有服务商
       </button>
       <div className="flex items-center gap-3 mt-3 mb-1">
         <ProviderMark name={info?.name || ""} title={info?.title || ""} size={36} />
@@ -357,7 +357,7 @@ export function ProviderForm({
                     className="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] font-medium text-ok bg-okSoft rounded-full px-2 py-0.5 pointer-events-none"
                     data-testid={`${tp}-field-saved-${f.key}`}
                   >
-                    ✓ Saved
+                    ✓ 已保存
                   </span>
                 )}
                 {/* §39: state lives IN the field — no status lines below. */}
@@ -366,7 +366,7 @@ export function ProviderForm({
                     className="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] font-medium text-ok bg-okSoft rounded-full px-2 py-0.5 pointer-events-none"
                     data-testid={`${tp}-saved-pill`}
                   >
-                    ✓ Tested &amp; saved
+                    ✓ 已测试并保存
                   </span>
                 )}
                 {ps.savedState && !f.secret && testable && (
@@ -374,7 +374,7 @@ export function ProviderForm({
                     className="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] font-medium text-ok bg-okSoft rounded-full px-2 py-0.5 pointer-events-none"
                     data-testid={`${tp}-saved-pill`}
                   >
-                    ✓ Detected
+                    ✓ 已检测
                   </span>
                 )}
               </div>
@@ -385,7 +385,7 @@ export function ProviderForm({
                   disabled={ps.verify.state === "testing" || (f.secret && !ps.secretFilled && !ps.credentialed)}
                   data-testid={`${tp}-test`}
                 >
-                  {ps.verify.state === "testing" ? "…" : info?.needs_key ? "Test" : "Detect"}
+                  {ps.verify.state === "testing" ? "…" : info?.needs_key ? "测试" : "检测"}
                 </button>
               )}
             </div>
@@ -396,24 +396,24 @@ export function ProviderForm({
 
       {info?.needs_key && KEY_HELP[sel] && (
         <p className="text-[11.5px] text-faint mt-2">
-          No key yet?{" "}
+          还没有密钥？{" "}
           <button
             className="text-muted underline decoration-line underline-offset-2 hover:text-ink"
             onClick={() => openExternal(KEY_HELP[sel].url)}
           >
-            Create one at {KEY_HELP[sel].label} ↗
+            在 {KEY_HELP[sel].label} 创建 ↗
           </button>{" "}
-          — takes about a minute.
+          — 大约需要一分钟。
         </p>
       )}
       {info && !info.needs_key && (
         <p className="text-[11.5px] text-faint mt-2">
-          No API key needed — Ollama runs models on this Mac.{" "}
+          无需 API 密钥 — Ollama 在本机运行模型。{" "}
           <button
             className="text-muted underline decoration-line underline-offset-2 hover:text-ink"
             onClick={() => openExternal("https://ollama.com/download")}
           >
-            Install Ollama ↗
+            安装 Ollama ↗
           </button>
         </p>
       )}
@@ -432,7 +432,7 @@ export function ProviderForm({
               onClick={() => ps.setShowEndpoint(true)}
               data-testid={`${tp}-endpoint-link`}
             >
-              Custom endpoint ⌄
+              自定义端点 ⌄
             </button>
           );
         return (
@@ -453,7 +453,7 @@ export function ProviderForm({
                   className="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] font-medium text-ok bg-okSoft rounded-full px-2 py-0.5 pointer-events-none"
                   data-testid={`${tp}-field-saved-${ep.key}`}
                 >
-                  ✓ Saved
+                  ✓ 已保存
                 </span>
               )}
             </div>
