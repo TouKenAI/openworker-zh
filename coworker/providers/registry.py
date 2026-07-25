@@ -103,6 +103,17 @@ def _build_openai(profile: dict[str, Any], secrets: Any) -> ProviderClient:
     return OpenAIProvider(secrets=secrets, base_url=base_url)
 
 
+
+def _build_custom(profile: dict[str, Any], secrets: Any) -> ProviderClient:
+    # 自定义 OpenAI 兼容厂商：base_url / api_key / model 全部来自用户配置。
+    base_url = ((profile or {}).get("base_url") or "").strip() or None
+    api_key = ((profile or {}).get("api_key") or "").strip() or None
+    default_model = ((profile or {}).get("model") or "").strip() or ""
+    return OpenAIProvider(
+        secrets=secrets, base_url=base_url, api_key=api_key, default_model=default_model
+    )
+
+
 def _build_anthropic(profile: dict[str, Any], secrets: Any) -> ProviderClient:
     # Key resolution stays in AnthropicProvider/resolve_api_key (explicit → env → SecretStore),
     # deferred to first call so the provider can be built before a key exists.
@@ -218,6 +229,38 @@ DESCRIPTORS: list[ProviderDescriptor] = [
         recommended_model="gpt-5.6-sol",
         env_key="OPENAI_API_KEY",
     ),
+    ProviderDescriptor(
+        name="custom",
+        title="自定义 API (OpenAI 兼容)",
+        needs_key=False,
+        fields=[
+            ProviderField(
+                "base_url",
+                "API 地址 (base_url)",
+                required=True,
+                placeholder="https://your-host/v1",
+                help="填任意 OpenAI 兼容的服务地址，例如 https://api.stepfun.com/v1；留空则无法获取模型。",
+            ),
+            ProviderField(
+                "api_key",
+                "API Key（可选）",
+                secret=True,
+                required=False,
+                placeholder="sk-…（部分本地/兼容服务可留空）",
+            ),
+            ProviderField(
+                "model",
+                "默认模型",
+                required=False,
+                placeholder="如 gpt-4o / step-3.7-flash",
+                help="点“获取模型”后可从列表选择；不填则使用接口返回的首个模型。",
+            ),
+        ],
+        build=_build_custom,
+        recommended_model="",
+        env_key=None,
+    ),
+
     ProviderDescriptor(
         name="anthropic",
         title="Claude (Anthropic)",
