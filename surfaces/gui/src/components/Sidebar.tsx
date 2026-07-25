@@ -31,9 +31,9 @@ import { showPersonas } from "../flags";
 // Session surfaces shown as accordions, in display order. The surfaced personas drive this list
 // (so third-party / Ops personas appear); the hardcoded set is the fallback before personas load.
 const SURFACES: { key: string; label: string; icon: IconName; cls: string }[] = [
-  { key: "cowork", label: "Coworker", icon: "diamond", cls: "ico-cowork" },
-  { key: "chat", label: "Chat", icon: "chat", cls: "ico-chat" },
-  { key: "code", label: "Code", icon: "code", cls: "ico-code" },
+  { key: "cowork", label: "数字同事", icon: "diamond", cls: "ico-cowork" },
+  { key: "chat", label: "聊天", icon: "chat", cls: "ico-chat" },
+  { key: "code", label: "代码", icon: "code", cls: "ico-code" },
 ];
 
 const surfaceFromPersona = (p: Persona) => ({
@@ -77,11 +77,11 @@ function UnseenBadge({ n, failed }: { n: number; failed?: boolean }) {
 function LiveDot({ state }: { state?: "working" | "sleeping" | "idle" }) {
   if (state !== "working" && state !== "sleeping") return null;
   return state === "working" ? (
-    <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" title="Working now" />
+    <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" title="正在工作" />
   ) : (
     <span
       className="w-1.5 h-1.5 rounded-full bg-faint/60 shrink-0"
-      title="Sleeping (will wake itself)"
+      title="休眠中（会自动唤醒）"
     />
   );
 }
@@ -94,7 +94,7 @@ function OriginIcon({ s }: { s: SessionInfo }) {
     <ConnectorIcon
       connector={{ logo: "slack", brand_color: "#611f69" }}
       size={12}
-      title={s.origin_label || "From Slack"}
+      title={s.origin_label || "来自 Slack"}
     />
   );
 }
@@ -128,7 +128,7 @@ interface Props {
   onArchiveSession: (id: string, archived: boolean) => void;
   onTogglePin: (id: string, pinned: boolean) => void;
   onManage: () => void;
-  // Grouped-nav gear + New-session menu's "Manage personas…" entry points (§7).
+  // Grouped-nav gear + New-session menu's "管理角色…" entry points (§7).
   onOpenPersona: (id: string) => void;
   onManagePersonas: () => void;
   onOpenScheduled: () => void;
@@ -168,7 +168,7 @@ const compactAge = (iso?: string | null): string => {
   return `${Math.floor(days / 365)}y`;
 };
 
-// Sessions shown per group before "Show more" comes from Settings (sessions_peek, default 5).
+// Sessions shown per group before "显示更多" comes from Settings (sessions_peek, default 5).
 
 export function Sidebar(props: Props) {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -283,7 +283,7 @@ export function Sidebar(props: Props) {
   // (owner call 2026-07-20). An explicit stored choice always wins.
   const defaultLayout: "flat" | "grouped" = showPersonas() ? "grouped" : "flat";
   const [layout, setLayout] = useState<"flat" | "grouped">(defaultLayout);
-  // Sessions shown per group before "Show more" — Settings ▸ Appearance ▸ Sidebar.
+  // Sessions shown per group before "显示更多" — Settings ▸ Appearance ▸ Sidebar.
   const [peek, setPeek] = useState(5);
   useEffect(() => {
     getSettings()
@@ -323,7 +323,7 @@ export function Sidebar(props: Props) {
   useEffect(() => setOpenKey(props.agent), [props.agent]);
   const browseKey = openKey ?? props.agent; // the persona whose sessions the body shows
 
-  // Per-project collapse + "Show more". The active workspace's folder is open by default; toggling
+  // Per-project collapse + "显示更多". The active workspace's folder is open by default; toggling
   // any folder flips it (XOR). `projShowAll` lifts the peek cap for a given folder;
   // `personaShowAll` does the same for a (non-project) persona's flat session list.
   const [projToggled, setProjToggled] = useState<Set<string>>(new Set());
@@ -341,7 +341,7 @@ export function Sidebar(props: Props) {
   );
   // §31 (revised 2026-07-21): mention-spawned sessions list chronologically in Recent like any
   // other session — the OriginIcon in the row's indicator cluster marks where they came from.
-  // The separate collapsed "From Slack" band hid fresh mentions below week-old sessions.
+  // The separate collapsed "来自 Slack" band hid fresh mentions below week-old sessions.
   // A row in the account menu (§26): closes the menu, then runs the destination.
   const appMenuItem = (
     icon: IconName,
@@ -453,8 +453,8 @@ export function Sidebar(props: Props) {
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          title="Session actions"
-          aria-label="Session actions"
+          title="会话操作"
+          aria-label="会话操作"
           aria-haspopup="menu"
           aria-expanded={menuOpen}
           data-testid="row-menu"
@@ -475,20 +475,20 @@ export function Sidebar(props: Props) {
               style={{ top: rowMenu!.top, left: rowMenu!.left }}
               role="menu"
             >
-              {item("row-menu-rename", "pencil", "Rename", () => {
+              {item("row-menu-rename", "pencil", "重命名", () => {
                 setEditingId(s.session_id);
                 setEditValue(title);
               })}
-              {item("row-menu-pin", "pin", s.pinned ? "Unpin" : "Pin", () =>
+              {item("row-menu-pin", "pin", s.pinned ? "取消置顶" : "置顶", () =>
                 props.onTogglePin(s.session_id, !s.pinned),
               )}
-              {item("row-menu-archive", "archive", s.archived ? "Unarchive" : "Archive", () =>
+              {item("row-menu-archive", "archive", s.archived ? "取消归档" : "归档", () =>
                 props.onArchiveSession(s.session_id, !s.archived),
               )}
               <div className="h-px bg-line my-1 mx-2" />
               {confirmDelId === s.session_id ? (
                 <button
-                  title="Click again to permanently delete"
+                  title="再次点击以永久删除"
                   className="w-full flex items-center gap-2 px-2.5 py-1.5 text-[12.5px] text-left font-medium text-danger hover:bg-paper"
                   data-testid="row-menu-delete"
                   role="menuitem"
@@ -698,7 +698,7 @@ export function Sidebar(props: Props) {
     ) : null;
 
   // RECENT header with the group/filter control (§20) — the group toggle moved off the brand bar.
-  // "Group by" flips the persona accordion ↔ chronological list; "Filter by coworker" narrows to
+  // "分组方式" flips the persona accordion ↔ chronological list; "按数字同事筛选" narrows to
   // the checked personas (none checked = all shown).
   const recentHeader = () => {
     const filterPersonaList = (personas || []).filter(
@@ -711,8 +711,8 @@ export function Sidebar(props: Props) {
       </span>
       <button
         className="w-6 h-6 grid place-items-center rounded-md text-faint hover:text-ink hover:bg-paper -mr-1"
-        title="Group & filter conversations"
-        aria-label="Group and filter conversations"
+        title="分组与筛选会话"
+        aria-label="分组与筛选会话"
         onClick={() => setGroupMenuOpen((v) => !v)}
       >
         <Icon name="sliders" size={14} />
@@ -728,7 +728,7 @@ export function Sidebar(props: Props) {
             <div className="px-2 pt-1 pb-1 text-[10.5px] uppercase tracking-[0.06em] text-faint font-semibold">
               Group by
             </div>
-            {([["grouped", "Persona"], ["flat", "Chronological"]] as ["flat" | "grouped", string][]).map(
+            {([["grouped", "角色"], ["flat", "按时间"]] as ["flat" | "grouped", string][]).map(
               ([key, label]) => (
                 <button
                   key={key}
@@ -842,22 +842,22 @@ export function Sidebar(props: Props) {
   const isCurrent = (key: string) => props.agent === key; // the active session's persona
   const isExpanded = (key: string) => openKey === key; // its body is open
   // Expand ≠ switch: clicking a header only browses (toggles the accordion). The chat area
-  // changes only when a session is selected or "New session" is clicked.
+  // changes only when a session is selected or "新建会话" is clicked.
   const onHeaderClick = (key: string) => setOpenKey((k) => (k === key ? null : key));
 
-  // The expanded body for the active surface: a "New session" action, then the project-grouped
+  // The expanded body for the active surface: a "新建会话" action, then the project-grouped
   // (or flat) session list, then the archived disclosure.
   const surfaceBody = () => {
     return (
       <div className="space-y-1 px-1.5 pb-2 pt-0.5">
         {/* Body is flush inside the expanded group's fill (provided by the wrapper) so the header +
             its sessions read as one connected block — clear where a group ends and the next begins. */}
-        {/* No per-persona "New session" here — the top split button's ▾ already starts a session
+        {/* No per-persona "新建会话" here — the top split button's ▾ already starts a session
             in any persona (it was redundant + the mock's grouped cards don't have it). */}
         {workspaceSurface ? (
           <>
             {/* Codex-style Projects: a "+" header affordance, then collapsible folders whose
-                rows carry a right-aligned compact age and truncate to PROJECT_PEEK + "Show more". */}
+                rows carry a right-aligned compact age and truncate to PROJECT_PEEK + "显示更多". */}
             <div className="flex items-center justify-between px-1.5 pt-1">
               <span className="text-[10.5px] uppercase tracking-[0.07em] text-faint font-semibold">
                 Projects
@@ -942,7 +942,7 @@ export function Sidebar(props: Props) {
           <div className="space-y-0.5">
             {mine.filter(matches).length === 0 ? (
               <div className="px-2 py-1.5 text-[12px] text-faint leading-snug">
-                {normalizedQuery ? "No matching conversations." : "No conversations yet."}
+                {normalizedQuery ? "没有匹配的会话。" : "暂无会话。"}
               </div>
             ) : (
               <>
@@ -995,8 +995,8 @@ export function Sidebar(props: Props) {
         {props.onCollapse && (
           <button
             className="nav-pin-btn w-7 h-7 grid place-items-center rounded-md text-faint hover:text-ink hover:bg-paper shrink-0"
-            title={props.collapsed ? "Dock sidebar (⌘B)" : "Collapse sidebar (⌘B)"}
-            aria-label={props.collapsed ? "Dock sidebar" : "Collapse sidebar"}
+            title={props.collapsed ? "停靠侧边栏（⌘B）" : "折叠侧边栏（⌘B）"}
+            aria-label={props.collapsed ? "停靠侧边栏" : "折叠侧边栏"}
             onClick={props.onCollapse}
           >
             <Icon name="sidebar" size={16} />
@@ -1097,7 +1097,7 @@ export function Sidebar(props: Props) {
             <div className="space-y-0.5">
               {recentSessions.length === 0 ? (
                 <div className="px-2 py-1.5 text-[12px] text-faint leading-snug">
-                  {normalizedQuery ? "No matching conversations." : "No conversations yet."}
+                  {normalizedQuery ? "没有匹配的会话。" : "暂无会话。"}
                 </div>
               ) : (
                 <>
@@ -1111,7 +1111,7 @@ export function Sidebar(props: Props) {
                       onClick={() => setRecentExpanded((v) => !v)}
                     >
                       {recentExpanded
-                        ? "Show less"
+                        ? "显示更少"
                         : `Show ${recentSessions.length - RECENT_PEEK} more`}
                     </button>
                   )}
@@ -1171,26 +1171,26 @@ export function Sidebar(props: Props) {
                 )}
                 {appMenuItem(
                   "inbox",
-                  "Inbox",
+                  "收件箱",
                   props.onOpenInbox,
                   props.inboxActive,
                   <AttnBadge n={totalAttention} />,
                 )}
-                {appMenuItem("plug", "Connectors", props.onOpenIntegrations, props.integrationsActive)}
+                {appMenuItem("plug", "连接器", props.onOpenIntegrations, props.integrationsActive)}
                 <div className="h-px bg-line my-1 mx-2" />
                 {appMenuItem(
                   "gear",
-                  "Settings",
+                  "设置",
                   props.onManage,
                   false,
                   <span className="text-[11px] text-faint">⌘ ,</span>,
                 )}
-                {appMenuItem("clock", "Automations", props.onOpenScheduled, props.scheduledActive)}
-                {appMenuItem("audit", "Activity", props.onOpenAudit, props.auditActive)}
+                {appMenuItem("clock", "自动化", props.onOpenScheduled, props.scheduledActive)}
+                {appMenuItem("audit", "活动", props.onOpenAudit, props.auditActive)}
                 {cloud?.signed_in && (
                   <>
                     <div className="h-px bg-line my-1 mx-2" />
-                    {appMenuItem("signOut", "Sign out", async () => {
+                    {appMenuItem("signOut", "退出登录", async () => {
                       await cloudLogout().catch(() => {});
                       announceCloudChanged();
                     })}
@@ -1212,7 +1212,7 @@ export function Sidebar(props: Props) {
             }}
             aria-haspopup="menu"
             aria-expanded={appMenuOpen}
-            aria-label={cloud?.signed_in ? `Account: ${accountEmail}` : "Account: not signed in"}
+            aria-label={cloud?.signed_in ? `Account: ${accountEmail}` : "账号：未登录"}
           >
             <span
               className={
@@ -1247,9 +1247,9 @@ export function Sidebar(props: Props) {
                 data-testid="inbox-chip"
                 role="button"
                 aria-label={
-                  totalAttention > 0 ? `Inbox — ${totalAttention} items need you` : "Inbox"
+                  totalAttention > 0 ? `Inbox — ${totalAttention} items need you` : "收件箱"
                 }
-                title={totalAttention > 0 ? `Inbox — ${totalAttention} items need you` : "Inbox"}
+                title={totalAttention > 0 ? `Inbox — ${totalAttention} items need you` : "收件箱"}
                 onClick={(e) => {
                   // The chip goes STRAIGHT to Inbox — the menu is the row's target, not the chip's.
                   e.stopPropagation();
@@ -1320,8 +1320,8 @@ function NewSessionSplit({
         {!solo && (
           <button
             className="px-2.5 rounded-r-lg bg-accent text-white border-l border-white/25 hover:opacity-95 flex items-center"
-            title="Start with a specific persona"
-            aria-label="Choose a persona"
+            title="从指定角色开始"
+            aria-label="选择角色"
             onClick={() => setOpen((v) => !v)}
           >
             <Icon name="chevronDown" size={13} />
