@@ -167,9 +167,7 @@ function Buttons({
         </button>
       )}
       <span className="spacer" />
-      <button className="btn quiet-deny" onClick={() => onApprove("deny")}>
-        Deny
-      </button>
+      <button className="btn quiet-deny" onClick={() => onApprove("deny")}>拒绝</button>
     </div>
   );
 }
