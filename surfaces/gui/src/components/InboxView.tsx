@@ -24,9 +24,9 @@ const ICON_FOR: Record<string, "diamond" | "chat" | "code"> = {
 };
 
 const KIND_TABS: { key: string; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "approval", label: "Approvals" },
-  { key: "question", label: "Questions" },
+  { key: "all", label: "全部" },
+  { key: "approval", label: "审批" },
+  { key: "question", label: "提问" },
 ];
 
 const CHIP = (active: boolean) =>
@@ -122,7 +122,7 @@ export function InboxView({
     return (
       <button
         className="inbox-session-chip"
-        title={exists ? `Open “${label}”` : "Session unavailable"}
+        title={exists ? `Open “${label}”` : "会话不可用"}
         disabled={!exists}
         onClick={() =>
           exists && onOpenSession(it.session_id, it.session_workspace || "", it.session_agent || "cowork")
@@ -145,8 +145,8 @@ export function InboxView({
       <div className="flex-1 min-w-0 overflow-y-auto hairline-scroll">
         <div className="max-w-4xl mx-auto px-7 py-6">
           <PanelHead
-            title="Inbox"
-            sub="Approvals, questions, and notifications from your coworkers — including sessions running unattended."
+            title="收件箱"
+            sub="来自数字同事的审批、提问与通知 —— 含无人值守运行的会话。"
           />
 
           <div className="flex gap-5 border-b border-line mb-4">
@@ -242,7 +242,7 @@ export function InboxView({
 
               {visible.length === 0 ? (
                 <div className="manage-empty">
-                  {items.length === 0 ? "Nothing pending." : "Nothing pending for this filter."}
+                  {items.length === 0 ? "暂无待处理。" : "当前筛选下暂无待处理。"}
                 </div>
               ) : null}
 
