@@ -1320,6 +1320,15 @@ def create_app(manager: SessionManager) -> FastAPI:
             manager.verify_provider, name, (body or {}).get("fields")
         )
 
+
+    @app.post("/v1/providers/models")
+    async def providers_models(body: dict) -> dict[str, Any]:
+        # Live read-only model listing (sync httpx) — run off the event loop.
+        name = (body or {}).get("name", "") or "openai"
+        return await asyncio.to_thread(
+            manager.list_provider_models, name, (body or {}).get("fields")
+        )
+
     # -- settings (model API key) -----------------------------------------------
     @app.get("/v1/settings")
     def settings_get() -> dict[str, Any]:
