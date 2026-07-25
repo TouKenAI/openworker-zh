@@ -277,7 +277,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
                 data-testid="ob-tools-signedin"
               >
                 <span className="block text-[13px] font-semibold text-ok mb-0.5">
-                  🎉 已登录{cloud.account ? ` as ${cloud.account}` : ""}
+                  🎉 已登录{cloud.account ? `（${cloud.account}）` : ""}
                 </span>
                 <span className="block text-[12.5px] text-muted">
                   点击上方工具一键连接 —— 或随时在连接器页面添加。

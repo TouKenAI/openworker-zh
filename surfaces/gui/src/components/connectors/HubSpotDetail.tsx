@@ -34,31 +34,30 @@ export function HubSpotDetail({ c, cloud, slack: _slack, onChanged }: DetailProp
               <>
                 <span className="w-2 h-2 rounded-full bg-ok" />
                 <span data-testid="hubspot-status">
-                  {portals.length} portal{portals.length === 1 ? "" : "s"}
+                  {portals.length} 个门户
                 </span>
               </>
             ) : (
-              <span>Not connected</span>
+              <span>未连接</span>
             )}
           </div>
         </div>
         <button className={PILL_ACCENT} data-testid="add-portal-btn" onClick={() => setAdding(true)}>
-          ＋ Add portal
+          ＋ 添加门户
         </button>
       </div>
 
       {!c.connected && (
         <div className={GRP}>
           <div className={ROW + " text-[12.5px] text-muted"}>
-            Connect a portal — read-only or read &amp; write is chosen at consent; there are no
-            delete tools either way.
+            连接一个门户 —— 授权时选择只读或读写；无论哪种方式都不提供删除工具。
           </div>
         </div>
       )}
 
       {portals.length > 0 && (
         <>
-          <div className={GRP_H + " !mt-0"}>Portals</div>
+          <div className={GRP_H + " !mt-0"}>门户</div>
           <div className={GRP} data-testid="hubspot-portals">
             {portals.map((p) => (
               <PortalRow key={p.hub_id} p={p} onChanged={onChanged} />
@@ -71,15 +70,14 @@ export function HubSpotDetail({ c, cloud, slack: _slack, onChanged }: DetailProp
 
       <ToolsDisclosure c={c} onChanged={onChanged} />
       <div className={FOOT + " mt-2"}>
-        Hidden fields never reach an agent; stripped counts land in Activity. To limit what a
-        HUMAN teammate could ask for, use HubSpot permission sets on the connected user.
+        隐藏字段永远不会送达智能体；被剥离的计数会记录在活动日志中。要限制真人同事能请求的内容，请在已连接用户上使用 HubSpot 权限集。
       </div>
 
       {adding && (
         <AddConnectionModal
           c={c}
           cloud={cloud}
-          title="Add a portal"
+          title="添加门户"
           onClose={() => setAdding(false)}
           onChanged={onChanged}
         />
@@ -96,14 +94,14 @@ function PortalRow({ p, onChanged }: { p: HubSpotPortal; onChanged: () => void }
         <span className="text-[13px] font-medium truncate" title={`hub ${p.hub_id}`}>
           {p.name}
         </span>
-        {p.default && <span className={TAG_ACCENT}>Default</span>}
-        {p.sandbox && <span className={TAG_WARN}>Sandbox</span>}
+        {p.default && <span className={TAG_ACCENT}>默认</span>}
+        {p.sandbox && <span className={TAG_WARN}>沙箱</span>}
         {p.access && (
           <span className={TAG_QUIET} data-testid={`hubspot-access-tag-${p.hub_id}`}>
-            {p.access === "write" ? "read & write" : "read-only"}
+            {p.access === "write" ? "读写" : "只读"}
           </span>
         )}
-        {!p.managed && <span className={TAG_QUIET}>private app</span>}
+        {!p.managed && <span className={TAG_QUIET}>私有应用</span>}
       </span>
       {!p.default && (
         <button
@@ -114,12 +112,12 @@ function PortalRow({ p, onChanged }: { p: HubSpotPortal; onChanged: () => void }
             onChanged();
           }}
         >
-          Make default
+          设为默认
         </button>
       )}
       <button
         className={XBTN}
-        title="Disconnect this portal"
+        title="断开此门户连接"
         data-testid={`hubspot-disconnect-${p.hub_id}`}
         disabled={busy}
         onClick={async () => {
@@ -150,10 +148,10 @@ function PrivacyGroup({ c, onChanged }: Pick<DetailProps, "c" | "onChanged">) {
   };
   return (
     <>
-      <div className={GRP_H}>Access &amp; privacy</div>
+      <div className={GRP_H}>访问与隐私</div>
       <div className={GRP}>
         <div className={ROW} data-testid="hubspot-hidden-fields">
-          <span className={LABEL}>Hidden fields</span>
+          <span className={LABEL}>隐藏字段</span>
           <span className="min-w-0 flex-1 flex flex-wrap items-center gap-1.5">
             {fields.map((f) => (
               <span
@@ -168,7 +166,7 @@ function PrivacyGroup({ c, onChanged }: Pick<DetailProps, "c" | "onChanged">) {
             ))}
             <input
               className="flex-1 min-w-[140px] bg-transparent text-[12.5px] outline-none placeholder:text-faint"
-              placeholder="Property name, e.g. salary"
+              placeholder="属性名称，例如：薪资"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => {
@@ -179,7 +177,7 @@ function PrivacyGroup({ c, onChanged }: Pick<DetailProps, "c" | "onChanged">) {
           </span>
         </div>
       </div>
-      <div className={FOOT}>Stripped from every record agents read, across all portals.</div>
+      <div className={FOOT}>从智能体读取的每条记录中剥离，跨所有门户生效。</div>
     </>
   );
 }

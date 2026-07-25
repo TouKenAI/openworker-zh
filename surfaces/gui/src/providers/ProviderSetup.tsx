@@ -152,9 +152,9 @@ export function useProviderSetup(opts?: { onSaved?: () => void }): ProviderSetup
   const runTestAndSave = async (): Promise<boolean> => {
     if (!sel) return false;
     setVerify({ state: "testing" });
-    const res = await verifyProvider(sel, fields).catch(() => ({ ok: false, error: "unreachable" }));
+    const res = await verifyProvider(sel, fields).catch(() => ({ ok: false, error: "无法连接" }));
     if (!res.ok) {
-      setVerify({ state: "error", msg: res.error || "couldn't verify" });
+      setVerify({ state: "error", msg: res.error || "无法验证" });
       return false;
     }
     if (dirty || !info?.configured) await setProvider(sel, fields).catch(() => {});

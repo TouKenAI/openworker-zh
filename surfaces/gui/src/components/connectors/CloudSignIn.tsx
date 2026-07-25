@@ -26,10 +26,10 @@ export function CloudSignInInline({ blurb }: { blurb?: string }) {
           });
         }}
       >
-        {waiting ? "Check your browser…" : "Sign in to OpenWorker Cloud"}
+        {waiting ? "请查看你的浏览器…" : "登录 OpenWorker Cloud"}
       </button>
       <div className="text-[11.5px] text-faint">
-        {blurb || "Sign-in unlocks one-click connects — or switch to Manual, which works without it."}
+        {blurb || "登录后即可解锁一键连接——或切换到手动方式，无需登录也能使用。"}
       </div>
     </div>
   );
@@ -44,7 +44,7 @@ export function CloudStatusPending() {
       className="text-[12px] text-faint py-2 text-center"
       data-testid="cloud-status-pending"
     >
-      Checking OpenWorker Cloud sign-in…
+      正在检查 OpenWorker Cloud 登录状态…
     </div>
   );
 }

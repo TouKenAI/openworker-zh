@@ -50,7 +50,7 @@ function AttnBadge({ n }: { n: number }) {
   return (
     <span
       className="text-[10px] font-semibold text-ink bg-faint/30 rounded-full px-1.5 leading-[15px] shrink-0"
-      title={`${n} awaiting your attention`}
+      title={`${n} 条待你处理`}
     >
       {n > 99 ? "99+" : n}
     </span>
@@ -65,7 +65,7 @@ function UnseenBadge({ n, failed }: { n: number; failed?: boolean }) {
   return (
     <span
       className="text-[10px] font-semibold text-ink bg-faint/30 rounded-full px-1.5 leading-[15px] shrink-0"
-      title={failed ? `${n} new run${n > 1 ? "s" : ""} — the latest failed` : `${n} new run${n > 1 ? "s" : ""}`}
+      title={failed ? `${n} 个新运行 — 最近一次失败` : `${n} 个新运行`}
     >
       {n > 99 ? "99+" : n}
     </span>
@@ -498,7 +498,7 @@ export function Sidebar(props: Props) {
                   }}
                 >
                   <Icon name="trash" size={13} className="shrink-0" />
-                  <span className="flex-1">Delete?</span>
+                  <span className="flex-1">删除？</span>
                 </button>
               ) : (
                 <button
@@ -508,7 +508,7 @@ export function Sidebar(props: Props) {
                   onClick={() => setConfirmDelId(s.session_id)}
                 >
                   <Icon name="trash" size={13} className="shrink-0" />
-                  <span className="flex-1">Delete</span>
+                  <span className="flex-1">删除</span>
                 </button>
               )}
             </div>
@@ -660,7 +660,7 @@ export function Sidebar(props: Props) {
     pinnedSessions.length > 0 ? (
       <div>
         <div className="px-1.5 text-[10.5px] uppercase tracking-[0.07em] text-faint font-semibold mb-1">
-          Pinned
+          已置顶
         </div>
         <div className="space-y-0.5">
           {pinnedSessions.map((s) => cardRow(s))}
@@ -675,7 +675,7 @@ export function Sidebar(props: Props) {
     automations.length > 0 ? (
       <div data-testid="scheduled-band">
         <div className="px-1.5 text-[10.5px] uppercase tracking-[0.07em] text-faint font-semibold mb-1">
-          Scheduled
+          定时
         </div>
         <div className="space-y-0.5">
           {automations.map((a) => (
@@ -707,7 +707,7 @@ export function Sidebar(props: Props) {
     return (
     <div className="relative flex items-center justify-between px-1.5 mb-1" data-testid="recent-header">
       <span className="text-[10.5px] uppercase tracking-[0.07em] text-faint font-semibold">
-        Recent
+        最近
       </span>
       <button
         className="w-6 h-6 grid place-items-center rounded-md text-faint hover:text-ink hover:bg-paper -mr-1"
@@ -726,7 +726,7 @@ export function Sidebar(props: Props) {
             data-testid="group-filter-menu"
           >
             <div className="px-2 pt-1 pb-1 text-[10.5px] uppercase tracking-[0.06em] text-faint font-semibold">
-              Group by
+              分组方式
             </div>
             {([["grouped", "角色"], ["flat", "按时间"]] as ["flat" | "grouped", string][]).map(
               ([key, label]) => (
@@ -745,11 +745,11 @@ export function Sidebar(props: Props) {
                 <div className="my-1 border-t border-line" />
                 <div className="px-2 pt-1 pb-1 flex items-center justify-between">
                   <span className="text-[10.5px] uppercase tracking-[0.06em] text-faint font-semibold">
-                    Filter by coworker
+                    按数字同事筛选
                   </span>
                   {filterPersonas.size > 0 && (
                     <button className="text-[11px] text-accent" onClick={() => setFilterPersonas(new Set())}>
-                      Clear
+                      清除
                     </button>
                   )}
                 </div>
@@ -776,7 +776,7 @@ export function Sidebar(props: Props) {
                   })}
                 </div>
                 <div className="px-2 pt-1 pb-0.5 text-[11px] text-faint leading-snug">
-                  None checked shows all.
+                  未勾选则显示全部。
                 </div>
               </>
             )}
@@ -860,12 +860,12 @@ export function Sidebar(props: Props) {
                 rows carry a right-aligned compact age and truncate to PROJECT_PEEK + "显示更多". */}
             <div className="flex items-center justify-between px-1.5 pt-1">
               <span className="text-[10.5px] uppercase tracking-[0.07em] text-faint font-semibold">
-                Projects
+                项目
               </span>
               <button
                 className="w-5 h-5 grid place-items-center rounded text-faint hover:text-ink hover:bg-panel"
-                title="New project"
-                aria-label="New project"
+                title="新建项目"
+                aria-label="新建项目"
                 onClick={() => props.onNewProject(browseKey)}
               >
                 <Icon name="folderPlus" size={14} />
@@ -874,7 +874,7 @@ export function Sidebar(props: Props) {
             <div className="space-y-0.5">
               {projectOrder.length === 0 && (
                 <div className="px-2 py-1.5 text-[12px] text-faint leading-snug">
-                  No projects yet — start one with the + above.
+                  还没有项目 — 点击上方的 + 新建一个。
                 </div>
               )}
               {projectOrder.map((proj) => {
@@ -924,13 +924,13 @@ export function Sidebar(props: Props) {
                               className="px-2 py-1 text-[12px] text-faint hover:text-muted"
                               onClick={() => setProjShowAll((s) => toggleSet(s, proj))}
                             >
-                              Show more ({list.length - peek})
+                              显示更多（{list.length - peek}）
                             </button>
                           )}
                         </div>
                       ) : (
                         <div className="px-2 py-1.5 pl-[19px] text-[12px] text-faint leading-snug">
-                          No conversations in this project yet.
+                          该项目下还没有会话。
                         </div>
                       ))}
                   </div>
@@ -955,7 +955,7 @@ export function Sidebar(props: Props) {
                     className="px-2 py-1 text-[12px] text-faint hover:text-muted"
                     onClick={() => setPersonaShowAll((s) => toggleSet(s, browseKey))}
                   >
-                    Show more ({mine.filter(matches).length - peek})
+                    显示更多（{mine.filter(matches).length - peek}）
                   </button>
                 )}
               </>
@@ -970,7 +970,7 @@ export function Sidebar(props: Props) {
               onClick={() => setShowArchived((v) => !v)}
             >
               <Icon name={showArchived ? "chevronDown" : "chevronRight"} size={13} className="shrink-0" />
-              Archived ({archived.length})
+              已归档（{archived.length}）
             </button>
             {showArchived && (
               <div className="space-y-0.5 mt-0.5">{archived.filter(matches).map((s) => sessionRow(s))}</div>
@@ -1020,7 +1020,7 @@ export function Sidebar(props: Props) {
           className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] text-left text-muted hover:bg-paper hover:text-ink"
           onClick={() => setSearchModalOpen(true)}
         >
-          <Icon name="search" size={15} className="shrink-0" /> Search
+          <Icon name="search" size={15} className="shrink-0" /> 搜索
         </button>
       </div>
 
@@ -1036,7 +1036,7 @@ export function Sidebar(props: Props) {
           onClick={props.onOpenScheduled}
         >
           <Icon name="clock" size={15} className="shrink-0" />
-          <span className="flex-1">Automations</span>
+          <span className="flex-1">自动化</span>
         </button>
       </div>
 
@@ -1112,7 +1112,7 @@ export function Sidebar(props: Props) {
                     >
                       {recentExpanded
                         ? "显示更少"
-                        : `Show ${recentSessions.length - RECENT_PEEK} more`}
+                        : `显示更多（${recentSessions.length - RECENT_PEEK}）`}
                     </button>
                   )}
                 </>
@@ -1146,7 +1146,7 @@ export function Sidebar(props: Props) {
                 ) : (
                   <>
                     <div className="px-3 py-1.5 text-[11px] text-faint border-b border-line">
-                      Not signed in — one-click connections need OpenWorker Cloud
+                      未登录 — 一键连接需要 OpenWorker Cloud
                     </div>
                     <button
                       className="w-full flex items-center gap-2.5 px-3 py-1.5 mb-1 text-[13px] text-left text-accent hover:bg-paper"
@@ -1164,7 +1164,7 @@ export function Sidebar(props: Props) {
                         });
                       }}
                     >
-                      <Icon name="plug" size={15} className="shrink-0" /> Sign in to OpenWorker
+                      <Icon name="plug" size={15} className="shrink-0" /> 登录 OpenWorker
                       Cloud
                     </button>
                   </>
@@ -1212,7 +1212,7 @@ export function Sidebar(props: Props) {
             }}
             aria-haspopup="menu"
             aria-expanded={appMenuOpen}
-            aria-label={cloud?.signed_in ? `Account: ${accountEmail}` : "账号：未登录"}
+            aria-label={cloud?.signed_in ? `账号：${accountEmail}` : "账号：未登录"}
           >
             <span
               className={
@@ -1226,12 +1226,12 @@ export function Sidebar(props: Props) {
               {cloud?.signed_in ? accountName.slice(0, 1).toUpperCase() : "?"}
             </span>
             <span className={"truncate " + (cloud?.signed_in ? "" : "text-muted")}>
-              {cloud?.signed_in ? accountName : "Not signed in"}
+              {cloud?.signed_in ? accountName : "未登录"}
             </span>
             {cloud?.signed_in && (
               <span
                 className="w-[7px] h-[7px] rounded-full bg-ok shrink-0"
-                title="Signed in to OpenWorker Cloud"
+                title="已登录 OpenWorker Cloud"
                 aria-hidden
               />
             )}
@@ -1247,9 +1247,9 @@ export function Sidebar(props: Props) {
                 data-testid="inbox-chip"
                 role="button"
                 aria-label={
-                  totalAttention > 0 ? `Inbox — ${totalAttention} items need you` : "收件箱"
+                  totalAttention > 0 ? `收件箱 — 有 ${totalAttention} 项待你处理` : "收件箱"
                 }
-                title={totalAttention > 0 ? `Inbox — ${totalAttention} items need you` : "收件箱"}
+                title={totalAttention > 0 ? `收件箱 — 有 ${totalAttention} 项待你处理` : "收件箱"}
                 onClick={(e) => {
                   // The chip goes STRAIGHT to Inbox — the menu is the row's target, not the chip's.
                   e.stopPropagation();
@@ -1315,7 +1315,7 @@ function NewSessionSplit({
           }
           onClick={() => onNew(solo && enabled.length === 1 ? enabled[0].id : current)}
         >
-          <Icon name="plus" size={15} className="shrink-0" /> New session
+          <Icon name="plus" size={15} className="shrink-0" /> 新建会话
         </button>
         {!solo && (
           <button
@@ -1333,7 +1333,7 @@ function NewSessionSplit({
           <div className="fixed inset-0 z-20" onClick={() => setOpen(false)} />
           <div className="newsplit-menu absolute left-3 right-3 mt-1 z-30 bg-panel border border-line rounded-xl2 shadow-xl p-1">
             <div className="px-2 py-1 text-[10.5px] uppercase tracking-[0.06em] text-faint font-semibold">
-              Start a session as
+              以以下角色开始会话
             </div>
             {enabled.map((p) => (
               <button
@@ -1366,7 +1366,7 @@ function NewSessionSplit({
                     onManage();
                   }}
                 >
-                  Manage personas…
+                  管理角色…
                 </button>
               </div>
             )}

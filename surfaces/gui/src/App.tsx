@@ -61,9 +61,9 @@ const newId = () =>
   (crypto as any).randomUUID ? crypto.randomUUID().slice(0, 12) : Math.random().toString(36).slice(2, 14);
 
 const SUGGESTIONS = [
-  { ico: "⚙", text: "Run the test suite and summarize any failures." },
-  { ico: "✦", text: "Read the project and give me a 5-bullet overview." },
-  { ico: "↻", text: "Find and fix the failing build." },
+  { ico: "⚙", text: "运行测试套件并总结失败项。" },
+  { ico: "✦", text: "阅读项目并给出 5 条要点概览。" },
+  { ico: "↻", text: "找出并修复构建失败的问题。" },
 ];
 
 // Tools whose success means a new/changed file should show up under Artifacts right away.
@@ -697,7 +697,7 @@ export function App() {
           flushPartialStream();
           setItems((p) => [
             ...p,
-            { kind: "notice", tone: "warn", text: "错误：" + (d.error || "unknown"), retriable: true },
+            { kind: "notice", tone: "warn", text: "错误：" + (d.error || "未知"), retriable: true },
           ]);
           break;
         case "input_rejected":
@@ -1177,10 +1177,10 @@ export function App() {
         >
           <div className="flex items-center gap-2 text-[12.5px] font-semibold">
             <span className="w-[7px] h-[7px] rounded-full bg-faint toast-pulse" />
-            Automation started
+            自动化已启动
           </div>
           <div className="text-[12.5px] text-muted mt-0.5 ml-[15px] truncate">
-            {runToast.title} · {runToast.time} run
+            {runToast.title} · {runToast.time} 已运行
           </div>
           <div className="flex items-center justify-between ml-[15px] mt-1.5">
             <button
@@ -1191,8 +1191,8 @@ export function App() {
                 setRunToast(null);
               }}
             >
-              View run ›
-            </button>
+              查看运行 ›
+              </button>
             <button
               className="text-[12px] text-faint px-0.5"
               data-testid="toast-dismiss"
@@ -1384,7 +1384,7 @@ export function App() {
                 title="显示本次会话产生的文件"
               >
                 <Icon name="file" size={14} />
-                <span>Artifacts</span>
+                <span>产出文件</span>
                 <span className="topbar-artifacts-count">{artifactCount}</span>
               </button>
             )}
@@ -1416,14 +1416,14 @@ export function App() {
               >
                 <Icon name="clock" size={14} className="text-accent shrink-0" />
                 <span className="truncate text-muted">
-                  Scheduled run
+                  定时运行
                   {runContext?.title ? (
                     <>
                       {" — "}
                       <span className="text-ink font-medium">{runContext.title}</span>
                     </>
                   ) : null}{" "}
-                  · started by an automation
+                  · 由自动化任务启动
                 </span>
                 <button
                   className="ml-auto shrink-0 text-accent font-medium hover:underline"
@@ -1432,7 +1432,7 @@ export function App() {
                     setSurface("scheduled");
                   }}
                 >
-                  ← Back to runs
+                  ← 返回运行
                 </button>
               </div>
             )}
@@ -1448,11 +1448,11 @@ export function App() {
                   <div className="hero">
                     <h1 className="greeting">
                       <span className="mark">✦</span>
-                      {agent === "chat" ? "How can I help?" : "一起来做点东西吧。"}
+                      {agent === "chat" ? "有什么可以帮你的？" : "一起来做点东西吧。"}
                     </h1>
                     {needsWorkspace(agent) && (
                       <div className="suggestions">
-                        <div className="suggest-head">Try a task</div>
+                        <div className="suggest-head">试试这些任务</div>
                         {SUGGESTIONS.map((s, i) => (
                           <div className="suggest" key={i} onClick={() => workspace && send(s.text)}>
                             <span className="ico">{s.ico}</span>
@@ -1511,7 +1511,7 @@ export function App() {
                   onClick={followLatest}
                 >
                   <Icon name="chevronDown" size={13} />
-                  Jump to latest
+                  跳到最新
                 </button>
               </div>
             )}
@@ -1652,7 +1652,7 @@ function WaitingForAgent() {
     <div className="waiting-transcript">
       <div className="waiting-row" aria-live="polite">
         <span className="waiting-spinner" />
-        <span>Waiting for agent...</span>
+        <span>正在等待同事…</span>
       </div>
     </div>
   );

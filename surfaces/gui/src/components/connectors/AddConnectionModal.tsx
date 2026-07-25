@@ -58,14 +58,14 @@ export function AddConnectionModal({
       <div
         className="absolute left-1/2 top-[14%] -translate-x-1/2 w-[480px] max-w-[calc(100vw-2rem)] bg-panel rounded-2xl border border-line shadow-2xl"
         role="dialog"
-        aria-label={title || `Connect ${c.title}`}
+        aria-label={title || `连接 ${c.title}`}
       >
         <div className="flex items-center gap-3 px-5 pt-5">
           <ConnectorBadge connector={c} size={34} title={c.title} />
           <div className="flex-1 font-semibold text-[16px] tracking-tight">
-            {title || `Connect ${c.title}`}
+            {title || `连接 ${c.title}`}
           </div>
-          <button className="text-faint hover:text-ink text-[18px] leading-none" onClick={onClose} title="Close">
+          <button className="text-faint hover:text-ink text-[18px] leading-none" onClick={onClose} title="关闭">
             ×
           </button>
         </div>
@@ -84,7 +84,7 @@ export function AddConnectionModal({
                     }
                     onClick={() => setPane(p)}
                   >
-                    {p === "one" ? "One click" : "Manual"}
+                    {p === "one" ? "一键" : "手动"}
                   </button>
                 ))}
               </div>
@@ -146,14 +146,13 @@ function McpOneClick({ c, onConnected }: { c: Connector; onConnected: () => void
     setError(null);
     const res = await connectMcpBacked(c.name);
     if (res.ok) setWaiting(true);
-    else setError(res.error || "could not start the connect");
+    else setError(res.error || "无法启动连接");
   };
   return (
     <div className="px-5 py-4 space-y-3">
       <p className="text-[13px] text-muted">
-        Opens {c.title} in your browser — sign in and approve access there. No tokens
-        typed, and no OpenWorker account needed: the sign-in runs entirely on this
-        computer.
+        在你的浏览器中打开 {c.title}——登录并授权访问。无需输入令牌，也无需
+        OpenWorker 账户：登录过程完全在本机完成。
       </p>
       <button
         className={PILL_ACCENT + " w-full !py-2"}
@@ -161,12 +160,12 @@ function McpOneClick({ c, onConnected }: { c: Connector; onConnected: () => void
         onClick={go}
         disabled={waiting}
       >
-        {waiting ? "Check your browser…" : `Connect ${c.title}`}
+        {waiting ? "请查看你的浏览器…" : `连接 ${c.title}`}
       </button>
       {error && <div className="text-[12.5px] text-danger">{error}</div>}
       <p className="text-[12px] text-faint text-center flex items-center justify-center gap-1.5">
-        <span className={TAG_ACCENT}>Recommended</span> agents get a curated set of{" "}
-        {c.title} tools · tokens stay on this computer
+        <span className={TAG_ACCENT}>推荐</span> 智能体会获得一组精选的{" "}
+        {c.title} 工具 · 令牌保留在本机
       </p>
     </div>
   );
@@ -181,13 +180,12 @@ function GenericOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null
     setError(null);
     const res = await connectManaged(c.name);
     if (res.ok) setWaiting(true);
-    else setError(res.error || "could not start the connect");
+    else setError(res.error || "无法启动连接");
   };
   return (
     <div className="px-5 py-4 space-y-3">
       <p className="text-[13px] text-muted">
-        Opens {c.title} in your browser — approve access there. No tokens typed; connect
-        again with another account to add it alongside.
+        在你的浏览器中打开 {c.title}——在那里授权访问。无需输入令牌；使用其他账户再次连接即可一并添加。
       </p>
       {cloud?.signed_in ? (
         <button
@@ -196,7 +194,7 @@ function GenericOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null
           onClick={go}
           disabled={waiting}
         >
-          {waiting ? "Check your browser…" : `Connect ${c.title}`}
+          {waiting ? "请查看你的浏览器…" : `连接 ${c.title}`}
         </button>
       ) : cloud ? (
         <CloudSignInInline />
@@ -205,7 +203,7 @@ function GenericOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null
       )}
       {error && <div className="text-[12.5px] text-danger">{error}</div>}
       <p className="text-[12px] text-faint text-center flex items-center justify-center gap-1.5">
-        <span className={TAG_ACCENT}>Recommended</span> tokens stay on this computer
+        <span className={TAG_ACCENT}>推荐</span> 令牌保留在本机
       </p>
     </div>
   );
@@ -218,17 +216,16 @@ function SlackOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null }
     setError(null);
     const res = await connectManaged(c.name);
     if (res.ok) setWaiting(true);
-    else setError(res.error || "could not start the install");
+    else setError(res.error || "无法启动安装");
   };
   return (
     <div className="px-5 py-4 space-y-3">
       <p className="text-[13px] text-muted">
-        Opens Slack in your browser — approve @ocw for the workspace. No tokens; works for any
-        number of workspaces.
+        在你的浏览器中打开 Slack——为工作区授权 @ocw。无需令牌；支持任意数量的工作区。
       </p>
       {cloud?.signed_in ? (
         <button className={PILL_ACCENT + " w-full !py-2"} data-testid="modal-add-to-slack" onClick={go} disabled={waiting}>
-          {waiting ? "Check your browser…" : "Add to Slack"}
+          {waiting ? "请查看你的浏览器…" : "添加到 Slack"}
         </button>
       ) : cloud ? (
         <CloudSignInInline />
@@ -237,7 +234,7 @@ function SlackOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null }
       )}
       {error && <div className="text-[12.5px] text-danger">{error}</div>}
       <p className="text-[12px] text-faint text-center flex items-center justify-center gap-1.5">
-        <span className={TAG_ACCENT}>Recommended</span> relay · tokens stay on this computer
+        <span className={TAG_ACCENT}>推荐</span> 中继 · 令牌保留在本机
       </p>
     </div>
   );
@@ -250,21 +247,20 @@ function GithubOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null 
     setError(null);
     const res = await connectManaged(c.name);
     if (res.ok) setWaiting(true);
-    else setError(res.error || "could not start the install");
+    else setError(res.error || "无法启动安装");
   };
   return (
     <div className="px-5 py-4 space-y-3">
       <p className="text-[13px] text-muted">
-        Opens GitHub in your browser — approve OpenWorker there. An existing @ocw-agent App
-        installation links right up; otherwise you'll pick an account and repos. No tokens
-        typed; the agent acts as ocw-agent[bot].
+        在你的浏览器中打开 GitHub——在那里授权 OpenWorker。已安装的 @ocw-agent App
+        会直接关联；否则你需要选择账户和仓库。无需输入令牌；智能体以 ocw-agent[bot] 身份操作。
       </p>
       {cloud?.signed_in ? (
         /* One button: the broker is authorize-first — it links an existing installation or
            redirects the same tab on to the install page (the old "Already installed? Link
            it" question and the Configure dead-end are gone). */
         <button className={PILL_ACCENT + " w-full !py-2"} data-testid="modal-install-github-app" onClick={() => go()} disabled={waiting}>
-          {waiting ? "Check your browser…" : "Connect GitHub"}
+          {waiting ? "请查看你的浏览器…" : "连接 GitHub"}
         </button>
       ) : cloud ? (
         <CloudSignInInline />
@@ -273,7 +269,7 @@ function GithubOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null 
       )}
       {error && <div className="text-[12.5px] text-danger">{error}</div>}
       <p className="text-[12px] text-faint text-center flex items-center justify-center gap-1.5">
-        <span className={TAG_ACCENT}>Recommended</span> relay · short-lived tokens, never stored
+        <span className={TAG_ACCENT}>推荐</span> 中继 · 短期令牌，永不存储
       </p>
     </div>
   );
@@ -287,19 +283,18 @@ function HubSpotOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null
     setError(null);
     const res = await connectManaged(c.name, { access });
     if (res.ok) setWaiting(true);
-    else setError(res.error || "could not start the connect");
+    else setError(res.error || "无法启动连接");
   };
   return (
     <div className="px-5 py-4 space-y-3">
       <p className="text-[13px] text-muted">
-        Opens HubSpot in your browser — pick the portal there. What agents may do is chosen
-        NOW, at consent:
+        在你的浏览器中打开 HubSpot——在那里选择门户。智能体可以执行的操作在授权时即确定：
       </p>
       <div className="space-y-1.5" data-testid="hubspot-access">
         {(
           [
-            ["read", "Read-only", "search and read contacts, companies, deals, tickets"],
-            ["write", "Read & write", "adds: log notes and tasks, update records, create contacts — never delete"],
+            ["read", "只读", "搜索并读取联系人、公司、交易、工单"],
+            ["write", "读写", "新增：记录备注与任务、更新记录、创建联系人——永不删除"],
           ] as const
         ).map(([value, label, blurb]) => (
           <label key={value} className="flex items-start gap-2 text-[13px] cursor-pointer">
@@ -320,7 +315,7 @@ function HubSpotOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null
       </div>
       {cloud?.signed_in ? (
         <button className={PILL_ACCENT + " w-full !py-2"} data-testid="modal-connect-hubspot" onClick={go} disabled={waiting}>
-          {waiting ? "Check your browser…" : "Connect HubSpot"}
+          {waiting ? "请查看你的浏览器…" : "连接 HubSpot"}
         </button>
       ) : cloud ? (
         <CloudSignInInline />
@@ -329,7 +324,7 @@ function HubSpotOneClick({ c, cloud }: { c: Connector; cloud: CloudStatus | null
       )}
       {error && <div className="text-[12.5px] text-danger">{error}</div>}
       <p className="text-[12px] text-faint text-center">
-        Works for any number of portals · tokens stay on this computer
+        支持任意数量的门户 · 令牌保留在本机
       </p>
     </div>
   );
@@ -346,23 +341,23 @@ function SlackManual({ onConnected }: { onConnected: () => void }) {
     const res = await connectConnector("slack", { bot_token: bot.trim(), app_token: app.trim() });
     setBusy(false);
     if (res.ok) onConnected();
-    else setError(res.error || "could not connect");
+    else setError(res.error || "无法连接");
   };
   return (
     <div className="px-5 py-4 space-y-3">
       <ol className="list-decimal pl-4 text-[13px] text-muted space-y-1">
-        <li>Create an app at api.slack.com/apps</li>
-        <li>Enable Socket Mode, add bot scopes, install it to your workspace</li>
-        <li>Paste both tokens</li>
+        <li>在 api.slack.com/apps 创建应用</li>
+        <li>启用 Socket Mode，添加机器人权限范围，安装到你的工作区</li>
+        <li>粘贴两个令牌</li>
       </ol>
-      <input className={INPUT} type="password" placeholder="Bot token · xoxb-…" value={bot} spellCheck={false} onChange={(e) => setBot(e.target.value)} />
-      <input className={INPUT} type="password" placeholder="App token · xapp-…" value={app} spellCheck={false} onChange={(e) => setApp(e.target.value)} />
+      <input className={INPUT} type="password" placeholder="机器人令牌 · xoxb-…" value={bot} spellCheck={false} onChange={(e) => setBot(e.target.value)} />
+      <input className={INPUT} type="password" placeholder="应用令牌 · xapp-…" value={app} spellCheck={false} onChange={(e) => setApp(e.target.value)} />
       <button className={PILL_LINE + " w-full !py-2"} onClick={submit} disabled={busy || !bot.trim() || !app.trim()}>
-        {busy ? "Validating…" : "Connect"}
+        {busy ? "正在验证…" : "连接"}
       </button>
       {error && <div className="text-[12.5px] text-danger">{error}</div>}
       <p className="text-[12px] text-warnInk text-center">
-        One mode at a time — this pauses any relay workspaces.
+        一次仅一种模式——这会暂停所有中继工作区。
       </p>
     </div>
   );

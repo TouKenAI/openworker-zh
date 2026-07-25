@@ -215,7 +215,7 @@ function VoiceInputSection() {
   };
 
   const remove = async () => {
-    if (!window.confirm("删除 the local Whisper model and disable Voice Input?")) return;
+    if (!window.confirm("删除本机的 Whisper 模型并禁用语音输入？")) return;
     setError(null);
     try {
       publish(await deleteDictationModel());
@@ -234,7 +234,7 @@ function VoiceInputSection() {
         setPhase("transcribing");
         const transcript = (await stopDictation()).trim();
         setTestTranscript(transcript);
-        if (!transcript) throw new Error("No speech was detected. Try again and speak for a little longer.");
+        if (!transcript) throw new Error("未检测到语音。请重试，并稍微多说一会儿。");
         publish(await markDictationTestPassed());
       } else {
         setTestTranscript("");
@@ -298,7 +298,7 @@ function VoiceInputSection() {
               <div className="min-w-0 flex-1">
                 <div className="text-[13.5px] font-medium">Whisper Base · 英语</div>
                 <div className="text-[12px] text-muted mt-0.5">
-                  {status?.model_verified ? `Installed and verified · ${formatBytes(status.model_bytes)}` : `Local voice model · ${formatBytes(status?.model_bytes || 147_964_211)}`}
+                  {status?.model_verified ? `已安装并验证 · ${formatBytes(status.model_bytes)}` : `本机语音模型 · ${formatBytes(status?.model_bytes || 147_964_211)}`}
                 </div>
               </div>
               {status?.model_verified ? (
@@ -413,7 +413,7 @@ function AppearanceSection() {
 
       <div className={CARD + " p-4 mb-4"}>
         <div className={FIELD_LABEL}>主题</div>
-        <div className="seg mt-2.5" role="radiogroup" aria-label="Appearance">
+        <div className="seg mt-2.5" role="radiogroup" aria-label="外观">
           {(["light", "dark", "auto"] as const).map((p) => (
             <button key={p} className={p === theme ? "active" : ""} onClick={() => setTheme(p)}>
               {p === "light" ? "浅色" : p === "dark" ? "深色" : "自动"}
@@ -479,7 +479,7 @@ function TrustedWorkspacesCard() {
   }, []);
 
   const revoke = async (path: string) => {
-    if (!window.confirm(`撤销 command trust for ${path}?`)) return;
+    if (!window.confirm(`撤销 ${path} 的命令信任？`)) return;
     await setWorkspaceTrusted(path, false);
     refresh();
   };
@@ -616,7 +616,7 @@ function TokenSavingsCard() {
       </div>
 
       <div className="mt-3 text-[13px] text-ink">不支持原生 PDF 的模型</div>
-      <div className="seg mt-2" role="radiogroup" aria-label="PDF fallback" data-testid="pdf-fallback">
+      <div className="seg mt-2" role="radiogroup" aria-label="PDF 回退方式" data-testid="pdf-fallback">
         <button
           className={pdf.pdf_fallback === "text" ? "active" : ""}
           onClick={() => save({ pdf_fallback: "text" })}
@@ -728,7 +728,7 @@ function 文件Card() {
     setScratchMsg(null);
     const res = await setScratchBase(scratchDraft.trim());
     if (res.ok) {
-      setScratchMsg("保存d. New conversations will use this location.");
+      setScratchMsg("已保存。新会话将使用此位置。");
       refresh();
     } else {
       setScratchMsg(res.error || "无法使用该位置。");
@@ -756,7 +756,7 @@ function 文件Card() {
             onKeyDown={(e) => e.key === "Enter" && saveScratch()}
           />
           {desktop && (
-            <button className={BTN_BORDERED} onClick={browseScratch} title="Pick a folder">
+            <button className={BTN_BORDERED} onClick={browseScratch} title="选择文件夹">
               浏览
             </button>
           )}

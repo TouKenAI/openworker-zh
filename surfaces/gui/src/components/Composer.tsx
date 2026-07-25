@@ -290,7 +290,7 @@ export function Composer(props: Props) {
     setDictationError(null);
     try {
       if (dictation?.recording) {
-        setDictationBusy("Transcribing…");
+        setDictationBusy("正在转写…");
         const transcript = await stopDictation();
         if (transcript === null) throw new Error("无法转写你的录音。");
         if (transcript.trim()) {
@@ -404,8 +404,8 @@ export function Composer(props: Props) {
           <div className="relative">
             <button
               className={iconBtn + (attachMenuOpen ? " bg-paper text-ink" : "")}
-              title="Attach"
-              aria-label="Attach"
+              title="附件"
+              aria-label="附件"
               onClick={() => setAttachMenuOpen((v) => !v)}
             >
               <Icon name="plus" size={17} />
@@ -458,7 +458,7 @@ export function Composer(props: Props) {
             />
           ) : null}
 
-          {dictationBusy === "Transcribing…" && <span className="text-[11.5px] text-accent">Transcribing…</span>}
+          {dictationBusy === "正在转写…" && <span className="text-[11.5px] text-accent">正在转写…</span>}
 
           <span className="ml-auto" />
 
@@ -472,7 +472,7 @@ export function Composer(props: Props) {
               title="连接模型"
               aria-label="未连接模型 —— 请连接模型"
             >
-              <span className="pill-label">No model</span>
+              <span className="pill-label">无模型</span>
               <span className="model-warn-ico" aria-hidden>⚠</span>
             </button>
           ) : modelsLoaded ? (
@@ -484,7 +484,7 @@ export function Composer(props: Props) {
               data-testid="models-loading"
               title="正在从服务器获取模型列表"
             >
-              <span className="pill-label">Loading models…</span>
+              <span className="pill-label">正在加载模型…</span>
             </button>
           ))}
 
@@ -517,7 +517,7 @@ export function Composer(props: Props) {
           {/* send / stop */}
           {props.running ? (
             <button className="btn danger" onClick={props.onInterrupt}>
-              ⏹ Stop
+              ⏹ 停止
             </button>
           ) : (
             <button
@@ -540,7 +540,7 @@ export function Composer(props: Props) {
         </div>
       </div>
       <span className="sr-only" role="status" aria-live="polite">
-        {dictation?.recording ? `Listening, ${recordingTime}` : dictationBusy || ""}
+        {dictation?.recording ? `正在聆听，${recordingTime}` : dictationBusy || ""}
       </span>
     </div>
   );
@@ -614,9 +614,9 @@ function ModeMenu({
                 <div className="my-1 border-t border-line" />
                 <div className="flex items-center gap-2 px-2.5 py-1.5">
                   <span className="flex-1 min-w-0">
-                    <span className="block text-[13px] text-ink">Send approvals to Inbox</span>
+                    <span className="block text-[13px] text-ink">将审批发送到收件箱</span>
                     <span className="block text-[11px] text-faint leading-snug">
-                      Approvals &amp; questions go to the Inbox; the agent keeps working.
+                      审批与提问将进入收件箱；智能体继续工作。
                     </span>
                   </span>
                   <Toggle
@@ -657,7 +657,7 @@ function AttachChip({ a, onRemove }: { a: Attachment; onRemove: () => void }) {
           <span className="attach-name">{a.name}</span>
         </>
       )}
-      <button className="attach-x" onClick={onRemove} title="Remove">
+      <button className="attach-x" onClick={onRemove} title="移除">
         ✕
       </button>
     </div>

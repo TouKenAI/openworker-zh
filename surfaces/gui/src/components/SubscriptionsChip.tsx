@@ -205,7 +205,7 @@ export function ChannelPicker({
               className="px-3 py-1.5 text-[12px] text-faint"
               data-testid="roster-searching"
             >
-              searching your workspace’s channels…
+              正在搜索你工作区的频道…
             </div>
           )}
           {/* Live workspace-roster hits: type the NAME, we resolved the id. */}
@@ -235,7 +235,7 @@ export function ChannelPicker({
               )}
               {!r.is_member && (
                 <span className="block text-[11px] text-warnInk">
-                  invite @ocw to this channel in Slack so it can listen
+                  请在 Slack 中邀请 @ocw 加入此频道，以便它监听
                 </span>
               )}
             </button>
@@ -288,23 +288,23 @@ export function SubscriptionsChip({
     <div className="sub-chip-wrap" ref={ref}>
       <button
         className={"wschip sub-chip" + (open ? " active" : "")}
-        title="Channels this session listens to"
+        title="此会话监听的频道"
         onClick={() => setOpen((v) => !v)}
       >
         <Icon name="plug" size={12} /> {channels.length || "+"}
       </button>
       {open && (
         <div className="sub-pop" onMouseDown={(e) => e.stopPropagation()}>
-          <div className="sub-pop-head">Channels this session listens to</div>
+          <div className="sub-pop-head">此会话监听的频道</div>
           {channels.length === 0 ? (
-            <div className="dim sub-pop-empty">Not subscribed to any channel.</div>
+            <div className="dim sub-pop-empty">未订阅任何频道。</div>
           ) : (
             channels.map((c) => {
               const nm = recent.find((r) => r.channel === c)?.name;
               return (
               <div className="sub-pop-row" key={c}>
                 <span className="sub-pop-chan" title={c}>{nm ? `#${nm}` : c}</span>
-                <button className="sub-pop-x" title="Unsubscribe" onClick={() => remove(c)}>
+                <button className="sub-pop-x" title="取消订阅" onClick={() => remove(c)}>
                   ×
                 </button>
               </div>
@@ -314,7 +314,7 @@ export function SubscriptionsChip({
           <div className="sub-pop-add">
             <ChannelPicker value={draft} onChange={setDraft} recent={recent} onSubmit={add} />
             <button className="btn-primary sm" disabled={!draft.trim()} onClick={add}>
-              Add
+              添加
             </button>
           </div>
         </div>

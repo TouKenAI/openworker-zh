@@ -122,7 +122,7 @@ export function InboxView({
     return (
       <button
         className="inbox-session-chip"
-        title={exists ? `Open “${label}”` : "会话不可用"}
+        title={exists ? `打开「${label}」` : "会话不可用"}
         disabled={!exists}
         onClick={() =>
           exists && onOpenSession(it.session_id, it.session_workspace || "", it.session_agent || "cowork")
@@ -161,7 +161,7 @@ export function InboxView({
                 load();
               }}
             >
-              Pending
+              待处理
               {items.length > 0 && (
                 <span className="text-[11px] px-1.5 rounded-full bg-accentSoft text-accent leading-4">
                   {items.length}
@@ -173,7 +173,7 @@ export function InboxView({
               data-testid="inbox-tab-configure"
               onClick={() => setTab("configure")}
             >
-              Configure
+              配置
               {unroutedCount > 0 && (
                 <span className="text-[11px] px-1.5 rounded-full bg-warnSoft text-warnInk leading-4">
                   ⚠ {unroutedCount}
@@ -189,18 +189,17 @@ export function InboxView({
               <div className="text-[12px] text-faint -mt-1 mb-4" data-testid="inbox-routing">
                 {routing ? (
                   <span>
-                    Also delivered to{" "}
+                    同时送达至{" "}
                     <span className="text-muted" title={routing}>
                       {routingLabel}
                     </span>{" "}
-                    — replies there resolve items here.{" "}
+                    —— 在那里的回复会在此处处理相应事项。{" "}
                   </span>
                 ) : slackConnected ? (
-                  <span>Delivered here only. </span>
+                  <span>仅送达至此。 </span>
                 ) : (
                   <span>
-                    Delivered here only. Connect Slack (Connectors page) to also get these in a
-                    channel — more platforms later.{" "}
+                    仅送达至此。连接 Slack（连接器页面）即可在频道中接收这些消息 —— 后续将支持更多平台。{" "}
                   </span>
                 )}
                 <button
@@ -225,7 +224,7 @@ export function InboxView({
                       className={CHIP(personaFilter === "all")}
                       onClick={() => setPersonaFilter("all")}
                     >
-                      All coworkers
+                      所有数字同事
                     </button>
                     {personasWithItems.map((p) => (
                       <button
