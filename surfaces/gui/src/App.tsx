@@ -197,7 +197,7 @@ export function App() {
     setSurface("settings");
   };
   // Whether the default model's provider is actually configured (any provider). Drives the
-  // composer's "No model connected" chip. Default true so we don't flash the chip before settings
+  // composer's "未连接模型" chip. Default true so we don't flash the chip before settings
   // load; corrected by loadSettings.
   const [modelReady, setModelReady] = useState(true);
   const [surface, setSurface] = useState<
@@ -210,7 +210,7 @@ export function App() {
     if (surface !== "scheduled") setScheduledOpenId(null);
   }, [surface]);
   // The persona whose detail page is showing (surface === "persona"); empty falls back to the
-  // active session's persona. Phase 5 wires the grouped-nav gear + "Manage personas…" entry points.
+  // active session's persona. Phase 5 wires the grouped-nav gear + "管理角色…" entry points.
   const [personaViewId, setPersonaViewId] = useState<string>("");
   // Where the persona page returns on "back": the active session, or Settings ▸ Personas when it
   // was opened from there (persona config now lives in Settings).
@@ -311,7 +311,7 @@ export function App() {
     unattendedRef.current = on;
     setUnattendedState(on);
   }, []);
-  // The Mode menu's "Send approvals to Inbox" toggle (§22 — the old InboxControl, folded in).
+  // The Mode menu's "将审批发送到收件箱" toggle (§22 — the old InboxControl, folded in).
   const toggleUnattended = async (on: boolean) => {
     await setUnattended(sessionId, on);
     markUnattended(on);
@@ -333,14 +333,14 @@ export function App() {
     return p ? isProjectScoped(p) : gatesWorkspaceFallback(a);
   };
 
-  // The desktop tray's "Settings" item dispatches this on the window.
+  // The desktop tray's "设置" item dispatches this on the window.
   useEffect(() => {
     const open = () => openSettings("appearance");
     window.addEventListener("coworker:open-settings", open);
     return () => window.removeEventListener("coworker:open-settings", open);
   }, []);
 
-  // "Run setup again" (from Settings) re-opens the wizard.
+  // "重新运行设置" (from Settings) re-opens the wizard.
   useEffect(() => {
     const open = () => {
       setOnboarding(true);
@@ -351,7 +351,7 @@ export function App() {
 
   const sessionRef = useRef<Session | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  // A prompt to auto-send once the next session connects (used by "Run now").
+  // A prompt to auto-send once the next session connects (used by "立即运行").
   const pendingPromptRef = useRef<string | null>(null);
   // The in-flight manual run to finalize after its first turn ({taskId, runId, sessionId}).
   const activeRunRef = useRef<{ taskId: string; runId: string; sessionId: string } | null>(null);
@@ -442,7 +442,7 @@ export function App() {
           if (h.default_workspace && gatesWorkspace(agent)) setWorkspace(h.default_workspace);
           else await resumeLastOrGate();
           // The mount-time loadSettings races the sidecar boot and swallows its failure —
-          // on a cold start that left "Loading models…" stuck until the user visited
+          // on a cold start that left "正在加载模型…" stuck until the user visited
           // Settings (owner-hit 2026-07-23). Health just answered, so this one lands.
           loadSettings();
           if (!cancelled) setBooting(false);
@@ -488,7 +488,7 @@ export function App() {
       })
       .catch(() => {});
 
-  // Open Settings → Configure Models (from the composer's "No model connected" chip).
+  // Open Settings → Configure Models (from the composer's "未连接模型" chip).
   const openModelSetup = () => openSettings("models");
 
   // Leaving the Settings page: pick up any model/surface changes for the composer (the modal used to
@@ -687,7 +687,7 @@ export function App() {
           // Mid-session switch (server-applied): update the header fact and drop the
           // persisted marker into the live transcript (replay renders it from history).
           if (d.model) setModel(d.model);
-          setItems((p) => [...p, { kind: "notice", tone: "info", text: d.text || "Model switched" }]);
+          setItems((p) => [...p, { kind: "notice", tone: "info", text: d.text || "模型已切换" }]);
           break;
         case "interrupted":
           flushPartialStream();
@@ -697,13 +697,13 @@ export function App() {
           flushPartialStream();
           setItems((p) => [
             ...p,
-            { kind: "notice", tone: "warn", text: "Error: " + (d.error || "unknown"), retriable: true },
+            { kind: "notice", tone: "warn", text: "错误：" + (d.error || "unknown"), retriable: true },
           ]);
           break;
         case "input_rejected":
           setItems((p) => [
             ...p,
-            { kind: "notice", tone: "warn", text: d.error || "That message was rejected." },
+            { kind: "notice", tone: "warn", text: d.error || "该消息已被拒绝。" },
           ]);
           break;
         case "turn_done":
@@ -728,7 +728,7 @@ export function App() {
       onEvent: handleEvent,
       onOpen: () => {
         setConnected(true);
-        // Auto-send the task prompt once a "Run now" session connects.
+        // Auto-send the task prompt once a "立即运行" session connects.
         const p = pendingPromptRef.current;
         if (p) {
           pendingPromptRef.current = null;
@@ -799,7 +799,7 @@ export function App() {
     if (atBottomRef.current) scrollToBottom();
   }, [items, streaming]);
 
-  // Track produced-file count for the topbar "Artifacts" affordance (works even when the rail is
+  // Track produced-file count for the topbar "产出文件" affordance (works even when the rail is
   // hidden, where the rail itself doesn't fetch). Cowork only; refreshes on file writes/turn end.
   useEffect(() => {
     if (agent !== "cowork" || surface !== "session") {
@@ -881,7 +881,7 @@ export function App() {
     setStreaming("");
     setTodo([]);
     setRunning(false);
-    // "New session" under a browsed persona switches to it (expand≠switch: the header alone
+    // "新建会话" under a browsed persona switches to it (expand≠switch: the header alone
     // doesn't switch; this explicit action does).
     if (target !== agent) {
       setAgent(target);
@@ -910,7 +910,7 @@ export function App() {
       if (msg.type !== "automation_run_started") return;
       const d = (msg.data ?? {}) as Record<string, string>;
       setRunToast({
-        title: d.task_title || "Automation",
+        title: d.task_title || "自动化",
         sessionId: d.session_id || "",
         workspace: d.workspace || "",
         agent: d.agent || "cowork",
@@ -1065,7 +1065,7 @@ export function App() {
     }
   };
 
-  // "Run now": prepare a manual run, open its session, and auto-send the task so the agent
+  // "立即运行": prepare a manual run, open its session, and auto-send the task so the agent
   // runs LIVE in the main view; finalize it in history once the first turn finishes.
   const openRunSession = (
     sessionId: string,
@@ -1105,7 +1105,7 @@ export function App() {
   const subtitleParts = [modelDisplay];
   if (isProjectScoped(personaOf(agent)) && workspace) subtitleParts.push(baseName(workspace));
   const activeInfo = sessions.find((s) => s.session_id === sessionId);
-  const activeTitle = activeInfo?.title || "New session";
+  const activeTitle = activeInfo?.title || "新建会话";
 
   const desktop = isTauri();
   // Dev-only: `?overlay=1` simulates the desktop overlay layout in the browser (adds the
@@ -1144,7 +1144,7 @@ export function App() {
           <Icon name="logo" size={38} />
         </div>
         <div className="boot-text">
-          {resumedExisting ? "Restoring your session…" : "Starting OpenWorker…"}
+          {resumedExisting ? "正在恢复你的会话…" : "正在启动 OpenWorker…"}
           <span className="beta-tag">BETA</span>
         </div>
       </div>
@@ -1196,7 +1196,7 @@ export function App() {
             <button
               className="text-[12px] text-faint px-0.5"
               data-testid="toast-dismiss"
-              title="Dismiss"
+              title="关闭"
               onClick={() => setRunToast(null)}
             >
               ✕
@@ -1223,8 +1223,8 @@ export function App() {
           className="nav-reveal-btn"
           onClick={toggleNav}
           onMouseEnter={() => setNavPeek(true)}
-          title="Show sidebar (⌘B)"
-          aria-label="Show sidebar"
+          title="显示侧边栏（⌘B）"
+          aria-label="显示侧边栏"
         >
           <Icon name="sidebar" size={16} />
         </button>
@@ -1239,10 +1239,10 @@ export function App() {
               // The specialists tip: land on Settings ▸ Personas, where the Gallery link lives.
               openSettings("personas");
             } else if (next === "automations") {
-              // "Create your first automation" (§29) lands on the Automations quickstart.
+              // "创建你的第一个自动化" (§29) lands on the Automations quickstart.
               setSurface("scheduled");
             } else if (next === "work") {
-              // "Start working" teaches by landing (§24, §32): a fresh session with the rail's
+              // "开始工作" teaches by landing (§24, §32): a fresh session with the rail's
               // Access section expanded. Bump after the session switch settles.
               startNewSession();
               setTimeout(openAccess, 80);
@@ -1328,31 +1328,31 @@ export function App() {
                 <button
                   className="topbar-icon-btn"
                   onClick={toggleNav}
-                  aria-label="Show sidebar"
-                  title="Show sidebar (⌘B)"
+                  aria-label="显示侧边栏"
+                  title="显示侧边栏（⌘B）"
                 >
                   <Icon name="sidebar" size={16} />
                 </button>
                 <button
                   className="topbar-icon-btn"
                   onClick={() => startNewSession()}
-                  aria-label="New session"
-                  title="New session"
+                  aria-label="新建会话"
+                  title="新建会话"
                 >
                   <Icon name="plus" size={16} />
                 </button>
                 <button
                   className="topbar-icon-btn"
                   onClick={() => setSearchOpen(true)}
-                  aria-label="Search"
-                  title="Search"
+                  aria-label="搜索"
+                  title="搜索"
                 >
                   <Icon name="search" size={16} />
                 </button>
               </div>
             )}
             {/* §32: no session-settings row up here anymore — the §23 rest/hover/click glance
-                machinery retired with the drawer. "What can this touch" lives permanently on
+                machinery retired with the drawer. "它能访问什么" lives permanently on
                 the rail's Access section header; the panel toggle is the one entry. */}
           </div>
           {/* Center: title + facts subtitle (§22, amended: the ⋯ menu removed — the nav row's
@@ -1381,7 +1381,7 @@ export function App() {
                 className="topbar-artifacts-btn"
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => setRailHidden(false)}
-                title="Show files this conversation produced"
+                title="显示本次会话产生的文件"
               >
                 <Icon name="file" size={14} />
                 <span>Artifacts</span>
@@ -1395,8 +1395,8 @@ export function App() {
                 className="topbar-icon-btn"
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => setRailHidden((h) => !h)}
-                aria-label={railHidden ? "Show side panel" : "Hide side panel"}
-                title={railHidden ? "Show side panel" : "Hide side panel"}
+                aria-label={railHidden ? "显示侧栏面板" : "隐藏侧栏面板"}
+                title={railHidden ? "显示侧栏面板" : "隐藏侧栏面板"}
               >
                 <Icon name="sidebarRight" size={16} />
               </button>
@@ -1448,7 +1448,7 @@ export function App() {
                   <div className="hero">
                     <h1 className="greeting">
                       <span className="mark">✦</span>
-                      {agent === "chat" ? "How can I help?" : "Let's build something."}
+                      {agent === "chat" ? "How can I help?" : "一起来做点东西吧。"}
                     </h1>
                     {needsWorkspace(agent) && (
                       <div className="suggestions">
@@ -1537,10 +1537,10 @@ export function App() {
               resetKey={sessionId}
               placeholder={
                 agent === "code"
-                  ? "Ask the coder to build, fix, or explain…  (drop or paste files)"
+                  ? "让编程同事构建、修复或解释…（拖入或粘贴文件）"
                   : agent === "chat"
-                    ? "Ask anything…  (drop or paste files)"
-                    : "Ask the coworker…  (drop or paste files)"
+                    ? "随便问问…（拖入或粘贴文件）"
+                    : "向数字同事提问…（拖入或粘贴文件）"
               }
               approvalSlot={
                 // Live inline cards are for ATTENDED sessions only; when Unattended the prompt is
