@@ -4,6 +4,7 @@ import {
   removeProvider,
   setProvider,
   verifyProvider,
+  fetchProviderModels,
   type ProviderInfo,
 } from "../api";
 import { openExternal } from "../tauri";
@@ -312,6 +313,25 @@ export function ProviderForm({
   footer?: ReactNode;
 }) {
   const { info, sel } = ps;
+  const [models, setModels] = useState<string[]>([]);
+  const [fetching, setFetching] = useState(false);
+  const [fetchErr, setFetchErr] = useState<string | undefined>();
+  const fetchModels = async () => {
+    if (!ps.sel) return;
+    setFetching(true);
+    setFetchErr(undefined);
+    const res = await fetchProviderModels(ps.sel, ps.fields).catch(() => ({
+      ok: false,
+      error: "获取失败",
+    }));
+    setFetching(false);
+    if (!res.ok) {
+      setFetchErr(res.error || "获取失败");
+      setModels([]);
+      return;
+    }
+    setModels(res.models || []);
+  };
   const label = "block text-[12px] text-muted mt-3 mb-1";
   const input =
     "w-full px-3 py-2 rounded-lg border bg-panel text-[13.5px] outline-none focus:border-accent";
@@ -458,6 +478,46 @@ export function ProviderForm({
               )}
             </div>
             {ep.help && <p className="text-[11.5px] text-faint mt-1">{ep.help}</p>}
+          </div>
+        );
+      })()}
+
+      {/* 获取模型：对任意带 base_url 的厂商，拉取并列出可用模型，点选填入 model 字段 */}
+      {(() => {
+        const ep = (info?.fields || []).find((f) => f.key === "base_url");
+        if (!ep) return null;
+        const hasModel = (info?.fields || []).some((f) => f.key === "model");
+        return (
+          <div className="mt-3">
+            <div className="flex items-center gap-2">
+              <button
+                className="px-4 rounded-lg border border-line text-[13px] font-medium text-ink hover:border-lineStrong shrink-0 disabled:opacity-40"
+                onClick={() => void fetchModels()}
+                disabled={fetching || !(ps.fields["base_url"] || "").trim()}
+                data-testid={`${tp}-fetch-models`}
+              >
+                {fetching ? "获取中…" : "获取模型"}
+              </button>
+              {fetchErr && <span className="text-[12px] text-warnInk truncate">{fetchErr}</span>}
+            </div>
+            {models.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5 max-h-40 overflow-auto">
+                {models.map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    className={
+                      "text-[12px] rounded-full border px-2.5 py-1 " +
+                      (hasModel ? "cursor-pointer hover:border-lineStrong" : "cursor-default opacity-70")
+                    }
+                    onClick={() => hasModel && ps.setFieldValue("model", m)}
+                    data-testid={`${tp}-model-${m}`}
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         );
       })()}
