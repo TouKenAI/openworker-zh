@@ -20,13 +20,13 @@ import {
 // with no in-app explanation. The server still honors both — a session already in one of
 // those modes keeps working; the picker just doesn't offer them.
 const PERMISSION_OPTIONS: Option[] = [
-  { value: "discuss", label: "Discuss", description: "Chat and explore — no edits or commands" },
-  { value: "interactive", label: "Ask for approval", description: "Ask before edits and commands" },
-  { value: "auto", label: "Full access", description: "Run everything without asking" },
+  { value: "discuss", label: "闲聊", description: "闲聊探索 —— 不编辑、不执行命令" },
+  { value: "interactive", label: "需要审批", description: "编辑/执行命令前先询问" },
+  { value: "auto", label: "完全访问", description: "直接执行，不再询问" },
 ];
 
 // No hardcoded model fallback: until the server supplies the list (a few seconds after a
-// cold app boot), the picker renders a disabled "Loading models…" chip. A baked-in list
+// cold app boot), the picker renders a disabled "正在加载模型…" chip. A baked-in list
 // goes stale and silently offers ids the backend never confirmed (caught 2026-07-21).
 
 // Drop the provider prefix for display (anthropic:claude-opus-4-8 → claude-opus-4-8); full id on hover.
@@ -292,7 +292,7 @@ export function Composer(props: Props) {
       if (dictation?.recording) {
         setDictationBusy("Transcribing…");
         const transcript = await stopDictation();
-        if (transcript === null) throw new Error("Could not transcribe your recording.");
+        if (transcript === null) throw new Error("无法转写你的录音。");
         if (transcript.trim()) {
           setText((draft) => (draft.trim() ? `${draft.trimEnd()} ${transcript.trim()}` : transcript.trim()));
         }
@@ -302,17 +302,17 @@ export function Composer(props: Props) {
       }
 
       const status = dictation || (await getDictationStatus());
-      if (!status) throw new Error("Voice dictation is unavailable.");
+      if (!status) throw new Error("语音听写不可用。");
       if (!status.supported || !status.model_verified || !status.test_passed) {
         props.onConfigureVoiceInput?.();
         return;
       }
-      setDictationBusy("Starting microphone…");
+      setDictationBusy("正在启动麦克风…");
       const recording = await startDictation();
-      if (!recording?.recording) throw new Error("Could not start the microphone.");
+      if (!recording?.recording) throw new Error("无法启动麦克风。");
       setDictation(recording);
     } catch (error) {
-      setDictationError(error instanceof Error ? error.message : "Voice dictation is unavailable.");
+      setDictationError(error instanceof Error ? error.message : "语音听写不可用。");
       const status = await getDictationStatus();
       if (status) setDictation(status);
     } finally {
@@ -355,7 +355,7 @@ export function Composer(props: Props) {
           <button
             className="shrink-0 opacity-60 hover:opacity-100"
             onClick={() => setAttachNotice(null)}
-            title="Dismiss"
+            title="关闭"
           >
             ✕
           </button>
@@ -390,7 +390,7 @@ export function Composer(props: Props) {
         <textarea
           ref={textareaRef}
           className="w-full block px-3.5 pt-3.5 pb-1.5 text-[14.5px]"
-          placeholder={props.placeholder || "Ask the coworker…  (drop or paste files)"}
+          placeholder={props.placeholder || "向数字同事提问…（拖入或粘贴文件）"}
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={onKey}
@@ -414,11 +414,11 @@ export function Composer(props: Props) {
               <>
                 <div className="fixed inset-0 z-30" onClick={() => setAttachMenuOpen(false)} />
                 <div className="absolute z-40 bottom-full mb-1 left-0 min-w-[180px] rounded-xl border border-line bg-panel shadow-2xl py-1.5">
-                  {attachItem("image", "Photo or image", () => pickFiles("image/*"))}
+                  {attachItem("image", "图片", () => pickFiles("image/*"))}
                   {attachItem("file", "PDF", () => pickFiles("application/pdf,.pdf"))}
                   {attachItem(
                     "fileCode",
-                    "Other files",
+                    "其他文件",
                     () => pickFiles("text/*,.md,.csv,.json,.yaml,.yml,.log,.py,.ts,.tsx,.js,.rs,.go,.toml"),
                   )}
                 </div>
@@ -469,8 +469,8 @@ export function Composer(props: Props) {
             <button
               className="pill model-warn chip"
               onClick={() => props.onConnectModel?.()}
-              title="Connect a model"
-              aria-label="No model connected — connect a model"
+              title="连接模型"
+              aria-label="未连接模型 —— 请连接模型"
             >
               <span className="pill-label">No model</span>
               <span className="model-warn-ico" aria-hidden>⚠</span>
@@ -482,7 +482,7 @@ export function Composer(props: Props) {
               className="pill chip text-faint cursor-default"
               disabled
               data-testid="models-loading"
-              title="Fetching the model list from the server"
+              title="正在从服务器获取模型列表"
             >
               <span className="pill-label">Loading models…</span>
             </button>
@@ -502,12 +502,12 @@ export function Composer(props: Props) {
               title={
                 dictationBusy ||
                 (dictation?.recording
-                  ? "Stop recording and transcribe"
+                  ? "停止录音并转写"
                   : voiceReady
-                    ? "Start local voice dictation"
-                    : "Configure Voice Input in Settings")
+                    ? "开始本地语音听写"
+                    : "在设置中配置语音输入")
               }
-              aria-label={dictation?.recording ? "Stop dictation" : voiceReady ? "Start dictation" : "Configure Voice Input in Settings"}
+              aria-label={dictation?.recording ? "停止听写" : voiceReady ? "开始听写" : "在设置中配置语音输入"}
               aria-disabled={!voiceReady && !dictation?.recording}
             >
               <Icon name={dictation?.recording ? "stop" : "mic"} size={16} />
@@ -529,8 +529,8 @@ export function Composer(props: Props) {
               }
               onClick={submit}
               disabled={!props.connected || !!dictation?.recording || !!dictationBusy}
-              title={needsModel ? "Connect a model to send" : undefined}
-              aria-label="Send"
+              title={needsModel ? "连接模型后才能发送" : undefined}
+              aria-label="发送"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M12 19V5M5 12l7-7 7 7" />
@@ -546,7 +546,7 @@ export function Composer(props: Props) {
   );
 }
 
-// The composer's Mode menu (§22): a quiet "Mode ⌄" chip opening the five permission options with
+// The composer's Mode menu (§22): a quiet "模式 ⌄" chip opening the five permission options with
 // the current one marked, plus — when the session supports it — the "Send approvals to Inbox"
 // toggle at the bottom (the old standalone InboxControl, folded in).
 function ModeMenu({
@@ -565,17 +565,17 @@ function ModeMenu({
   return (
     <div className="relative">
       {/* Borderless, and it names the CHOSEN mode (owner ask 2026-07-11, competitor composer
-          comparison): "Ask for approval ⌄" not a generic "Mode ⌄" pill. aria-label stays
-          "Mode" so the accessible name is stable across mode changes. */}
+          comparison): "需要审批 ⌄" not a generic "模式 ⌄" pill. aria-label stays
+          "模式" so the accessible name is stable across mode changes. */}
       <button
         className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[12px] text-muted hover:text-ink hover:bg-paper shrink-0"
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label="Mode"
+        aria-label="模式"
         title={
           `Mode: ${current?.label || mode}` +
-          (unattended ? " · approvals go to the Inbox" : "")
+          (unattended ? " · 审批将进入收件箱" : "")
         }
       >
         {current?.label || mode}
@@ -622,7 +622,7 @@ function ModeMenu({
                   <Toggle
                     checked={!!unattended}
                     onChange={onUnattendedChange}
-                    title="Send approvals to the Inbox"
+                    title="将审批发送到收件箱"
                   />
                 </div>
               </>
