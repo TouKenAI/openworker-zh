@@ -612,8 +612,7 @@ function TokenSavingsCard() {
     <div className={CARD + " p-4 mb-4"} data-testid="token-savings-card">
       <div className={FIELD_LABEL}>节省 Token</div>
       <div className={FIELD_HELP}>
-        PDF attachments travel with every turn of a conversation, so large documents multiply
-        what you spend on tokens.
+        PDF 附件会随每次对话轮次一起发送，大文件会成倍增加你的 Token 消耗。
       </div>
 
       <div className="mt-3 text-[13px] text-ink">不支持原生 PDF 的模型</div>
@@ -665,8 +664,7 @@ function TokenSavingsCard() {
         </label>
       </div>
       <div className={FIELD_HELP}>
-        PDFs over these limits are not attached — you&rsquo;ll see a notice in the composer
-        instead.
+        超出限制的 PDF 不会被附上 —— 输入框里会显示提示。
       </div>
     </div>
   );
@@ -769,8 +767,7 @@ function 文件Card() {
           </button>
         </div>
       <div className={FIELD_HELP}>
-        Each conversation gets its own folder under this location. Existing conversations keep their current
-        folder; you can grant access to more folders inside any conversation.
+        每个会话在此位置下拥有独立文件夹。已有会话保留原文件夹；可在任意会话中授权更多文件夹。
       </div>
       {scratchMsg && <div className="text-[12.5px] text-muted mt-2.5">{scratchMsg}</div>}
     </div>
