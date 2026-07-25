@@ -631,9 +631,7 @@ function TokenSavingsCard() {
         </button>
       </div>
       <div className={FIELD_HELP}>
-        Claude, GPT and Gemini read PDFs natively — this only applies to models that
-        don&rsquo;t (GLM, Kimi, DeepSeek, local models…). Text extraction is cheapest; page
-        images cost more tokens and need a vision-capable model.
+        Claude、GPT、Gemini 原生支持 PDF —— 仅对不支持的模型生效（GLM、Kimi、DeepSeek、本地模型…）。文本提取最省；页面图片更费 Token，且需支持视觉的模型。
       </div>
 
       <div className="mt-3 flex items-center gap-5">
