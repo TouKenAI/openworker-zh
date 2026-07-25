@@ -1857,3 +1857,16 @@ export class Session {
     this.ws.close();
   }
 }
+
+
+export async function fetchProviderModels(
+  name: string,
+  fields: Record<string, string>,
+): Promise<{ ok: boolean; models?: string[]; error?: string }> {
+  const res = await fetch(`${httpBase()}/v1/providers/models`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, fields }),
+  });
+  return res.json();
+}
