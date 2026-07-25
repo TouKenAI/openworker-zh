@@ -1583,6 +1583,61 @@ class SessionManager:
             return {"ok": False, "error": "Enter an API key to test."}
         return verify_provider_key(name, api_key=api_key, base_url=base_url)
 
+
+    def list_provider_models(
+        self, name: str, fields: Optional[dict[str, Any]]
+    ) -> dict[str, Any]:
+        """Fetch the model list from a provider's OpenAI-compatible /models endpoint, so the
+        UI can offer a '获取模型' button instead of forcing the user to type a model id.
+        Does NOT persist anything."""
+        import os
+        import httpx
+
+        d = get_descriptor(name)
+        if d is None:
+            return {"ok": False, "error": f"unknown provider: {name}"}
+        fields = fields or {}
+        profile = self.secrets.get(f"provider:{name}") or {}
+        base_url = (fields.get("base_url") or profile.get("base_url") or "").strip()
+        if not base_url:
+            for f in d.fields:
+                if f.key == "base_url" and getattr(f, "default", ""):
+                    base_url = f.default
+                    break
+        if not base_url:
+            return {"ok": False, "error": "请先填写 API 地址 (base_url)。"}
+        api_key = (fields.get("api_key") or profile.get("api_key") or "").strip()
+        if not api_key and d.env_key:
+            api_key = os.environ.get(d.env_key, "").strip()
+
+        url = base_url.rstrip("/") + "/models"
+        headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
+        try:
+            with httpx.Client(timeout=20.0) as client:
+                r = client.get(url, headers=headers)
+                if r.status_code == 404 and "/v1" not in url:
+                    r = client.get(base_url.rstrip("/") + "/v1/models", headers=headers)
+                r.raise_for_status()
+                data = r.json()
+        except Exception as e:
+            return {"ok": False, "error": f"无法获取模型列表：{type(e).__name__}: {e}"}
+
+        raw = data.get("data") if isinstance(data, dict) else data
+        if isinstance(data, dict) and "models" in data:
+            raw = data["models"]
+        if not isinstance(raw, list):
+            return {"ok": False, "error": "接口返回格式无法识别（缺少 data/models 列表）。"}
+        ids: list[str] = []
+        for m in raw:
+            if isinstance(m, str):
+                ids.append(m)
+            elif isinstance(m, dict):
+                ids.append(m.get("id") or m.get("name") or "")
+        ids = [x for x in ids if x]
+        if not ids:
+            return {"ok": False, "error": "接口未返回任何模型。"}
+        return {"ok": True, "models": ids}
+
     def _model_provider(self, model: str) -> str:
         """The provider a model string routes to (known `prefix:` or the OpenAI default)."""
         if ":" in (model or ""):
