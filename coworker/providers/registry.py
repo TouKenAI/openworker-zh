@@ -336,10 +336,10 @@ DESCRIPTORS: list[ProviderDescriptor] = [
     _compat(
         "stepfun",
         "阶跃星辰 (StepFun)",
-        base_url="https://api.stepfun.ai/step_plan/v1",
+        base_url="https://api.stepfun.com/v1",
         recommended_model="step-3.7-flash",
         env_key="STEPFUN_API_KEY",
-        endpoint_help="默认填 Step Plan 推理端点（模型 step-3.7-flash）。若你的 key 是开放平台标准 key，把 endpoint 改为 https://api.stepfun.com/v1 并填对应模型。",
+        endpoint_help="默认填阶跃星辰【中国区】标准 OpenAI 兼容端点（api.stepfun.com/v1），模型 step-3.7-flash。若你的 Key 是在 stepfun.ai 全球区申请的，把端点改为 https://api.stepfun.ai/v1；Step Plan 推理端点为 https://api.stepfun.ai/step_plan/v1。Key 所属区域必须与端点区域一致，否则会报未授权。",
     ),
 
     ProviderDescriptor(
