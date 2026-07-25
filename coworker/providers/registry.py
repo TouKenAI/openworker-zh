@@ -333,6 +333,15 @@ DESCRIPTORS: list[ProviderDescriptor] = [
         recommended_model="accounts/fireworks/models/glm-5p2",
         env_key="FIREWORKS_API_KEY",
     ),
+    _compat(
+        "stepfun",
+        "阶跃星辰 (StepFun)",
+        base_url="https://api.stepfun.ai/step_plan/v1",
+        recommended_model="step-3.7-flash",
+        env_key="STEPFUN_API_KEY",
+        endpoint_help="默认填 Step Plan 推理端点（模型 step-3.7-flash）。若你的 key 是开放平台标准 key，把 endpoint 改为 https://api.stepfun.com/v1 并填对应模型。",
+    ),
+
     ProviderDescriptor(
         name="ollama",
         title="Ollama (local models)",
