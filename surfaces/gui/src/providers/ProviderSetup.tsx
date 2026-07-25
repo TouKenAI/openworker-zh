@@ -320,10 +320,11 @@ export function ProviderForm({
     if (!ps.sel) return;
     setFetching(true);
     setFetchErr(undefined);
-    const res = await fetchProviderModels(ps.sel, ps.fields).catch(() => ({
-      ok: false,
-      error: "获取失败",
-    }));
+    const res: { ok: boolean; models?: string[]; error?: string } =
+      await fetchProviderModels(ps.sel, ps.fields).catch(() => ({
+        ok: false,
+        error: "获取失败",
+      }));
     setFetching(false);
     if (!res.ok) {
       setFetchErr(res.error || "获取失败");
