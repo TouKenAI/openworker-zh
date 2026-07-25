@@ -20,6 +20,7 @@ import minimax from "./logos/minimax.svg";
 import xai from "./logos/xai.svg";
 import meta from "./logos/meta.svg";
 import stepfun from "./logos/stepfun.svg";
+import custom from "./logos/custom.svg";
 
 export const PROVIDER_LOGOS: Record<string, string> = {
   anthropic,
@@ -27,6 +28,7 @@ export const PROVIDER_LOGOS: Record<string, string> = {
   gemini,
   meta,
   stepfun,
+  custom,
   ollama,
   fireworks,
   together,
@@ -42,6 +44,7 @@ export const PROVIDER_LOGOS: Record<string, string> = {
 export const PROVIDER_ORDER = [
   "anthropic",
   "openai",
+  "custom",
   "gemini",
   "meta",
   "ollama",
