@@ -32,7 +32,7 @@ import {
   type DictationDownloadProgress,
   type DictationStatus,
 } from "../tauri";
-import { use主题Pref } from "../theme";
+import { useThemePref } from "../theme";
 import { Icon } from "./Icon";
 import { PanelHead } from "./IntegrationsView";
 import { ModelsTab } from "./ManageTabs";
@@ -388,7 +388,7 @@ function PersonasSection({ onOpenPersona }: { onOpenPersona?: (id: string) => vo
 
 // -- Appearance + app behaviour ------------------------------------------------
 function AppearanceSection() {
-  const [theme, set主题] = use主题Pref();
+  const [theme, setTheme] = useThemePref();
   const [autostart, setAuto] = useState(false);
   const [keepAwake, setKeep] = useState(false);
   const desktop = isTauri();
@@ -415,7 +415,7 @@ function AppearanceSection() {
         <div className={FIELD_LABEL}>主题</div>
         <div className="seg mt-2.5" role="radiogroup" aria-label="Appearance">
           {(["light", "dark", "auto"] as const).map((p) => (
-            <button key={p} className={p === theme ? "active" : ""} onClick={() => set主题(p)}>
+            <button key={p} className={p === theme ? "active" : ""} onClick={() => setTheme(p)}>
               {p === "light" ? "浅色" : p === "dark" ? "深色" : "自动"}
             </button>
           ))}
