@@ -121,8 +121,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
             {/* Persistent header — stays put while the region below swaps (§39). */}
             <h1 className="text-[19px] font-semibold">欢迎使用 OpenWorker<span className="beta-tag">BETA</span></h1>
             <p className="text-[13px] text-muted mt-0.5 mb-4">
-              Pick a model provider to get started — OpenWorker runs on your own key, and your
-              key and your data stay on this Mac.
+              选择一个模型服务商即可开始 —— OpenWorker 使用你自己的密钥运行，密钥与数据都留在本机。
             </p>
 
             {!ps.sel ? (
@@ -203,8 +202,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
                           className="shrink-0 rounded-full border border-line px-4 py-1.5 text-[12.5px] font-medium hover:border-lineStrong"
                           onClick={() => startTool(name)}
                         >
-                          Connect
-                        </button>
+                          连接</button>
                       ))}
                   </div>
                 );
@@ -282,8 +280,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
                   🎉 已登录{cloud.account ? ` as ${cloud.account}` : ""}
                 </span>
                 <span className="block text-[12.5px] text-muted">
-                  Connect a tool above with one click — or add them anytime later from the
-                  Connectors page.
+                  点击上方工具一键连接 —— 或随时在连接器页面添加。
                 </span>
               </div>
             )}
@@ -296,8 +293,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
                   onClick={() => setStep(2)}
                   data-testid="ob-continue-tools"
                 >
-                  Next
-                </button>
+                  下一步</button>
               ) : (
                 <button
                   className="ml-auto px-5 py-2 rounded-full border border-line text-[13px] text-muted hover:text-ink hover:border-lineStrong shrink-0"
@@ -309,8 +305,7 @@ export function Onboarding({ onDone }: { onDone: (next?: "work" | "gallery" | "a
               )}
             </div>
             <p className="text-[11px] text-faint mt-3">
-              30+ more tools on the Connectors page — add or remove anytime. Tokens stay on
-              this Mac.
+              连接器页面还有 30+ 工具 —— 可随时添加或移除。令牌留在本机。
             </p>
           </section>
         )}
