@@ -51,6 +51,7 @@ export const PROVIDER_ORDER = [
   "mistral",
   "qwen",
   "minimax",
+  "stepfun",
   "xai",
 ];
 
