@@ -1,3 +1,19 @@
+# OpenWorker 汉化版（ZH）+ 自定义API
+
+> **本仓库是 [andrewyng/openworker](https://github.com/andrewyng/openworker) 的中文汉化二次开发版**，由 [重庆投肯智能科技有限公司](https://github.com/TouKenAI) 维护，遵循原项目 MIT 许可证。
+>
+> **相对官方原版的改动（其余完全一致）：**
+> 1. **核心界面全量汉化**：引导、设置、侧边栏、审批卡、收件箱、模型配置等；
+> 2. **新增「自定义 API」厂商**：任意 OpenAI 兼容端点（base_url + Key），支持一键**获取模型列表**与**测试连接**；
+> 3. **新增「阶跃星辰 StepFun」厂商**：默认中国区端点 `api.stepfun.com/v1`。
+>
+> **Windows 安装包下载（汉化版 exe/msi）**：见本仓库 [Releases](https://github.com/TouKenAI/openworker-zh/releases)（`zh-` 开头的 tag）。
+> 安装包未签名（与官方原版相同状态），SmartScreen 提示时选「更多信息 → 仍要运行」。
+>
+> 要官方英文原版请前往上游仓库。以下为官方原版 README 原文。
+
+---
+
 # OpenWorker
 
 **[openworker.com](https://openworker.com)** · [Download](#download) · [Issues](https://github.com/andrewyng/openworker/issues)
